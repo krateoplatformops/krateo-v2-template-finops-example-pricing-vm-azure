@@ -44,7 +44,7 @@ stringData:
 EOF
 ```
 
-Install Krateo's Operator generator
+Install [Krateo's Operator generator](https://github.com/krateoplatformops/oasgen-provider/):
 ```
 helm install krateo-oasgen-provider krateo/oasgen-provider -n krateo-system
 ```
