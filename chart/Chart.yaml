@@ -1,5 +1,5 @@
 apiVersion: v2
-name: example-pricing-vm-azure
+name: finops-example-pricing-vm-azure
 description: Krateo FinOps Example Pricing for Azure VM
 
 # A chart can be either an 'application' or a 'library' chart.
