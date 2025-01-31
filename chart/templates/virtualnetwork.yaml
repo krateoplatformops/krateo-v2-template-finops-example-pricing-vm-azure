@@ -1,0 +1,20 @@
+apiVersion: network.azure.com/v1api20201101
+kind: VirtualNetwork
+metadata:
+  name: {{ include "example-pricing-vm-azure.fullname" . }}
+spec:
+  location: {{ .Values.armRegionName }}
+  owner:
+    name: {{ .Values.resourceGroupName }}
+  addressSpace:
+    addressPrefixes:
+      - 10.0.0.0/16
+---
+apiVersion: network.azure.com/v1api20201101
+kind: VirtualNetworksSubnet
+metadata:
+  name: {{ include "example-pricing-vm-azure.fullname" . }}
+spec:
+  owner:
+    name: {{ include "example-pricing-vm-azure.fullname" . }}
+  addressPrefix: 10.0.0.0/24

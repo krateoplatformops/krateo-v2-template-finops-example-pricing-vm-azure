@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "armRegionName": {
+      "default": "westus3",
+      "required": [],
+      "title": "armRegionName",
+      "type": "string"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "resourceGroupName": {
+      "default": "aso-sample-rg",
+      "required": [],
+      "title": "resourceGroupName",
+      "type": "string"
+    },
+    "vmPassword": {
+      "default": "Password123%",
+      "required": [],
+      "title": "vmPassword",
+      "type": "string"
+    }
+  },
+  "required": [
+    "vmPassword",
+    "armRegionName",
+    "resourceGroupName"
+  ],
+  "type": "object"
+}
