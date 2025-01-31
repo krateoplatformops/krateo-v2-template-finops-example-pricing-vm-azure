@@ -3,7 +3,7 @@ kind: VirtualMachine
 metadata:
   name: aso-sample-vm
   annotations: 
-    focus-resource-name: '["DZH318Z0K9JH/00KX"]'
+    krateo-finops-focus-resource: '["DZH318Z0K9JH/00KX"]'
 spec:
   hardwareProfile:
     vmSize: Standard_B2ats_v2
@@ -30,7 +30,7 @@ spec:
       version: latest
 ---
 apiVersion: composition.krateo.io/v0-1-0
-kind: FocusDataPresentation
+kind: FocusDataPresentationAzure
 metadata:
   name: {{ include "example-pricing-vm-azure.fullname" . }}
 spec:
