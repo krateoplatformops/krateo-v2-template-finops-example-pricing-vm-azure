@@ -29,8 +29,8 @@ spec:
       sku: 22_04-lts
       version: latest
 ---
-apiVersion: composition.krateo.io/v0-2-7
-kind: FocusTemplate
+apiVersion: composition.krateo.io/v0-1-0
+kind: FocusDataPresentation
 metadata:
   name: {{ include "example-pricing-vm-azure.fullname" . }}
 spec:
