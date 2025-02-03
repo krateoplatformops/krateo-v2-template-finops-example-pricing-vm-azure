@@ -3,19 +3,19 @@ data:
   panel: "true"
 kind: ConfigMap
 metadata:
-  name: template-example-pricing-vm-azure-card
+  name: template-finops-example-pricing-vm-azure-card
   namespace: krateo-system
 ---
 apiVersion: templates.krateo.io/v1alpha1
 kind: Widget
 metadata:
-  name: template-example-pricing-vm-azure-card
+  name: template-finops-example-pricing-vm-azure-card
   namespace: krateo-system
 spec:
   actions:
   - template:
       apiVersion: templates.krateo.io/v1alpha1
-      name: template-example-pricing-vm-azure-customform
+      name: template-finops-example-pricing-vm-azure-customform
       namespace: krateo-system
       resource: customforms
       verb: GET
@@ -35,19 +35,20 @@ spec:
       status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
       date: ${ .getCompositionDefinition.metadata.creationTimestamp }
   propsRef:
-    name: template-example-pricing-vm-azure-card
+    name: template-finops-example-pricing-vm-azure-card
     namespace: krateo-system
   type: card
   api:
   - name: getCompositionDefinition
-    path: "/apis/core.krateo.io/v1alpha1/namespaces/krateo-system/compositiondefinitions/finopsexamplepricingvmazures"
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/krateo-system/compositiondefinitions/finops-example-pricing-vm-azure"
     verb: GET
     headers:
     - 'Accept: application/json'
   - name: getPricingInformation
     endpointRef: 
-      name: finops-database-handler-list
+      name: finops-database-handler-endpoint
       namespace: krateo-system
+    path: "/compute/pricing_frontend"
     verb: POST
     dependOn: getCompositionDefinition
     payload: "{\"composition_id\": \"${ .getCompositionDefinition.metadata.uid }\"}"
@@ -58,7 +59,7 @@ spec:
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: template-example-pricing-vm-azure-customform
+  name: template-finops-example-pricing-vm-azure-customform
   namespace: krateo-system
 data:
   onSubmitId: submit
@@ -68,12 +69,12 @@ data:
 apiVersion: templates.krateo.io/v1alpha1
 kind: CustomForm
 metadata:
-  name: template-example-pricing-vm-azure-customform
+  name: template-finops-example-pricing-vm-azure-customform
   namespace: krateo-system
 spec:
   type: customform
   propsRef:
-    name: template-example-pricing-vm-azure-customform
+    name: template-finops-example-pricing-vm-azure-customform
     namespace: krateo-system
   actions:
     - template:
