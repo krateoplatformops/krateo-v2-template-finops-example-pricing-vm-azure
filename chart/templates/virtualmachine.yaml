@@ -28,16 +28,3 @@ spec:
       offer: 0001-com-ubuntu-server-jammy
       sku: 22_04-lts
       version: latest
----
-apiVersion: composition.krateo.io/v0-1-0
-kind: FocusDataPresentationAzure
-metadata:
-  name: {{ include "example-pricing-vm-azure.fullname" . }}
-spec:
-  filter: serviceName eq 'Virtual Machines' and skuId eq 'DZH318Z0K9JH/00KX' and armRegionName eq '{{ .Values.armRegionName }}' and type eq 'Consumption'
-  scraperConfig:
-    tableName: pricing_table
-    pollingIntervalHours: 1
-    scraperDatabaseConfigRef: 
-      name: finops-tutorial-config
-      namespace: krateo-system
