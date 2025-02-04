@@ -51,7 +51,7 @@ spec:
     path: "/compute/pricing_frontend"
     verb: POST
     dependOn: getCompositionDefinition
-    payload: "{\"composition_id\": \"${ .getCompositionDefinition.metadata.uid }\"}"
+    payload: placeholder
     headers:
     - 'Accept: application/json'
     - 'Content-Type: application/json'
@@ -96,3 +96,25 @@ spec:
     verb: GET
     headers:
     - 'Accept: application/json'
+---
+apiVersion: krateo.io/v1alpha1
+kind: Patch
+metadata:
+  name: finops-example-pricing-vm-azure-patch
+  namespace: krateo-system
+spec:
+  from:
+    objectReference:
+      apiVersion: core.krateo.io/v1alpha1
+      kind: CompositionDefinition
+      name: finops-example-pricing-vm-azure
+      namespace: krateo-system
+    fieldPath: metadata
+  to:
+    objectReference:
+      apiVersion: templates.krateo.io/v1alpha1
+      kind: Widget
+      name: template-finops-example-pricing-vm-azure-card
+      namespace: krateo-system
+    fieldPath: spec.api[1].payload
+    transform: ${ "{\"composition_id\":\"" + .uid + "\"}"}
