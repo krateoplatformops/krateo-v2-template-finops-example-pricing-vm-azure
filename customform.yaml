@@ -28,7 +28,7 @@ spec:
   app:
     template:
       color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
-      content: ${ .getPricingInformation | "Pricing information:\n \(to_entries | map(" - \(.key)\u003A \(.value)€") | join("\n "))" }
+      content: ${ .getPricingInformation | "Pricing information:\n \(to_entries | map(" up to \(.value)$ per \(.key); ") | join("\n "))" }
       icon: fa-cubes
       tags: example-pricing-vm-azure-system,0.1.0
       title: example-pricing-vm-azure
