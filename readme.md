@@ -23,6 +23,8 @@ This composition definition uses the components from the following architecture:
 The following figure shows an example of the pricing information retrieved from the Azure Pricing API placed inside the widget card:
 ![FinOps Data Presentation Example](_diagrams/example.png)
 
+<sub>Note: the `1 GB/Month` expenditure has been added thorugh the API as an example of multiple values and will not show when installing the composition.</sub>
+
 ## Installation
 Install the cert-manager for the Azure operator:
 ```
