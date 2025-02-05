@@ -20,53 +20,6 @@
       "title": "name",
       "type": "string"
     },
-    "pricingScraperConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "pollingIntervalHours": {
-          "default": 1,
-          "required": [],
-          "title": "pollingIntervalHours",
-          "type": "integer"
-        },
-        "scraperDatabaseConfigRef": {
-          "additionalProperties": false,
-          "properties": {
-            "name": {
-              "default": "finops-database-handler",
-              "required": [],
-              "title": "name",
-              "type": "string"
-            },
-            "namespace": {
-              "default": "krateo-system",
-              "required": [],
-              "title": "namespace",
-              "type": "string"
-            }
-          },
-          "required": [
-            "name",
-            "namespace"
-          ],
-          "title": "scraperDatabaseConfigRef",
-          "type": "object"
-        },
-        "tableName": {
-          "default": "pricing_table",
-          "required": [],
-          "title": "tableName",
-          "type": "string"
-        }
-      },
-      "required": [
-        "tableName",
-        "pollingIntervalHours",
-        "scraperDatabaseConfigRef"
-      ],
-      "title": "pricingScraperConfig",
-      "type": "object"
-    },
     "resourceGroupName": {
       "default": "aso-sample-rg",
       "required": [],
@@ -105,8 +58,7 @@
     "vmAdminUsername",
     "vmPassword",
     "armRegionName",
-    "resourceGroupName",
-    "pricingScraperConfig"
+    "resourceGroupName"
   ],
   "type": "object"
 }
