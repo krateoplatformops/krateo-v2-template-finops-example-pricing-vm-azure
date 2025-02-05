@@ -6,10 +6,3 @@ vmAdminUsername: userAdmin
 vmPassword: Password123%
 armRegionName: westus3
 resourceGroupName: aso-sample-rg
-
-pricingScraperConfig:
-  tableName: pricing_table
-  pollingIntervalHours: 1
-  scraperDatabaseConfigRef: 
-    name: finops-database-handler
-    namespace: krateo-system
