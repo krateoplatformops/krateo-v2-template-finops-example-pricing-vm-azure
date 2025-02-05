@@ -1,0 +1,13 @@
+apiVersion: composition.krateo.io/v0-1-0
+kind: FocusDataPresentationAzure
+metadata:
+  name: {{ include "example-pricing-vm-azure.fullname" . }}
+spec:
+  annotationKey: krateo-finops-focus-resource
+  filter: serviceName eq 'Virtual Machines' and armSkuName eq '{{ .Values.vmSize }}' and type eq 'Consumption' and armRegionName eq '{{ .Values.armRegionName }}'
+  scraperConfig:
+    tableName: {{ .Values.pricingScraperConfig.tableName }}
+    pollingIntervalHours: {{ .Values.pricingScraperConfig.pollingIntervalHours }}
+    scraperDatabaseConfigRef: 
+      name: {{ .Values.pricingScraperConfig.scraperDatabaseConfigRef.name }}
+      namespace: {{ .Values.pricingScraperConfig.scraperDatabaseConfigRef.namespace }}

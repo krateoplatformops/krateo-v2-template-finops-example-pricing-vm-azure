@@ -14,10 +14,75 @@
       "title": "global",
       "type": "object"
     },
+    "name": {
+      "default": "aso-sample",
+      "required": [],
+      "title": "name",
+      "type": "string"
+    },
+    "pricingScraperConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "pollingIntervalHours": {
+          "default": 1,
+          "required": [],
+          "title": "pollingIntervalHours",
+          "type": "integer"
+        },
+        "scraperDatabaseConfigRef": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "default": "finops-database-handler",
+              "required": [],
+              "title": "name",
+              "type": "string"
+            },
+            "namespace": {
+              "default": "krateo-system",
+              "required": [],
+              "title": "namespace",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "namespace"
+          ],
+          "title": "scraperDatabaseConfigRef",
+          "type": "object"
+        },
+        "tableName": {
+          "default": "pricing_table",
+          "required": [],
+          "title": "tableName",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tableName",
+        "pollingIntervalHours",
+        "scraperDatabaseConfigRef"
+      ],
+      "title": "pricingScraperConfig",
+      "type": "object"
+    },
     "resourceGroupName": {
       "default": "aso-sample-rg",
       "required": [],
       "title": "resourceGroupName",
+      "type": "string"
+    },
+    "vmAdminUsername": {
+      "default": "userAdmin",
+      "required": [],
+      "title": "vmAdminUsername",
+      "type": "string"
+    },
+    "vmComputerName": {
+      "default": "poppy",
+      "required": [],
+      "title": "vmComputerName",
       "type": "string"
     },
     "vmPassword": {
@@ -25,12 +90,23 @@
       "required": [],
       "title": "vmPassword",
       "type": "string"
+    },
+    "vmSize": {
+      "default": "Standard_B2ats_v2",
+      "required": [],
+      "title": "vmSize",
+      "type": "string"
     }
   },
   "required": [
+    "name",
+    "vmSize",
+    "vmComputerName",
+    "vmAdminUsername",
     "vmPassword",
     "armRegionName",
-    "resourceGroupName"
+    "resourceGroupName",
+    "pricingScraperConfig"
   ],
   "type": "object"
 }

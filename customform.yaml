@@ -30,7 +30,7 @@ spec:
       color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
       content: ${ .getPricingInformation | "Pricing information:\n \(to_entries | map(" up to \(.value)$ per \(.key); ") | join("\n "))" }
       icon: fa-cubes
-      tags: example-pricing-vm-azure-system,0.1.0
+      tags: example-pricing-vm-azure-system,0.1.1
       title: example-pricing-vm-azure
       status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
       date: ${ .getCompositionDefinition.metadata.creationTimestamp }
@@ -79,17 +79,17 @@ spec:
   actions:
     - template:
         id: submit
-        apiVersion: composition.krateo.io/v0-1-0
+        apiVersion: composition.krateo.io/v0-1-1
         verb: POST
         resource: finopsexamplepricingvmazures
         payloadToOverride:
         - name: metadata.name
-          value: ${ git.toRepo.name }
+          value: ${ resourceGroupName }
         - name: metadata.namespace
-          value: ${ "example-pricing-vm-azure-system" }
+          value: ${ "krateo-system" }
   app:
     template:
-      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-1-0") | .schema.openAPIV3Schema.properties.spec.properties }
+      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-1-1") | .schema.openAPIV3Schema.properties.spec.properties }
   api:
   - name: getCRD
     path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/finopsexamplepricingvmazures.composition.krateo.io"
