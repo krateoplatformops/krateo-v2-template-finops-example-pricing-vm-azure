@@ -1,6 +1,9 @@
 apiVersion: v1
 data:
-  panel: "true"
+  drawer: "true"
+  form: "true"
+  showFormStructure: "true"
+  drawerSize: large
 kind: ConfigMap
 metadata:
   name: template-finops-example-pricing-vm-azure-card
@@ -28,7 +31,7 @@ spec:
   app:
     template:
       color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
-      content: ${ .getPricingInformation | "Pricing information:\n \(to_entries | map(" up to \(.value)$ per \(.key); ") | join("\n "))" }
+      content: ${ .getPricingInformation.status | "Pricing information:\n \(to_entries | map(" up to \(.value)$ per \(.key); ") | join("\n "))" }
       icon: fa-cubes
       tags: example-pricing-vm-azure-system,0.1.1
       title: example-pricing-vm-azure
@@ -45,16 +48,13 @@ spec:
     headers:
     - 'Accept: application/json'
   - name: getPricingInformation
-    endpointRef: 
-      name: finops-database-handler-endpoint
+    path: "/call?apiVersion=templates.krateo.io%2Fv1&resource=restactions&name=get-pricing-information-frontend&namespace=krateo-system"
+    verb: GET
+    endpointRef:
+      name: snowplow-endpoint
       namespace: krateo-system
-    path: "/compute/pricing_frontend"
-    verb: POST
-    dependOn: getCompositionDefinition
-    payload: placeholder
     headers:
     - 'Accept: application/json'
-    - 'Content-Type: application/json'
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -97,24 +97,29 @@ spec:
     headers:
     - 'Accept: application/json'
 ---
-apiVersion: krateo.io/v1alpha1
-kind: Patch
+apiVersion: templates.krateo.io/v1
+kind: RESTAction
 metadata:
-  name: finops-example-pricing-vm-azure-patch
+  name: get-pricing-information-frontend
   namespace: krateo-system
 spec:
-  from:
-    objectReference:
-      apiVersion: core.krateo.io/v1alpha1
-      kind: CompositionDefinition
-      name: finops-example-pricing-vm-azure
+  api:
+  - name: getCompositionDefinition
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/krateo-system/compositiondefinitions/finops-example-pricing-vm-azure"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
+    filter: .metadata.uid
+  - name: getPricingInformation
+    endpointRef: 
+      name: finops-database-handler-endpoint
       namespace: krateo-system
-    fieldPath: metadata
-  to:
-    objectReference:
-      apiVersion: templates.krateo.io/v1alpha1
-      kind: Widget
-      name: template-finops-example-pricing-vm-azure-card
-      namespace: krateo-system
-    fieldPath: spec.api[1].payload
-    transform: ${ "{\"composition_id\":\"" + .uid + "\"}"}
+    path: "/compute/pricing_frontend"
+    verb: POST
+    payload: |
+      ${ {composition_id: .getCompositionDefinition} }
+    headers:
+    - 'Accept: application/json'
+    - 'Content-Type: application/json'
+    filter: .
+  filter: .getPricingInformation
