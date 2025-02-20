@@ -95,7 +95,7 @@ metadata:
   namespace: krateo-system
 spec:
   annotationKey: krateo-finops-focus-resource
-  filter: serviceName eq 'Virtual Machines' and skuId eq 'DZH318Z0K9JH/00KX' and armRegionName eq 'westus3' and type eq 'Consumption'
+  filter: serviceName eq 'Virtual Machines' and armSkuName eq 'Standard_B2ats_v2' and armRegionName eq 'westus3' and type eq 'Consumption'
   scraperConfig:
     tableName: pricing_table
     pollingIntervalHours: 1
