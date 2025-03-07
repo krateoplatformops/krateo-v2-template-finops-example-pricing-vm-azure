@@ -37,7 +37,7 @@ helm repo add aso2 https://raw.githubusercontent.com/Azure/azure-service-operato
 helm repo update
 helm upgrade --install aso2 aso2/azure-service-operator \
     --create-namespace \
-    --namespace=krateo-system \
+    --namespace=azureserviceoperator-system \
     --set crdPattern='resources.azure.com/*;compute.azure.com/*;network.azure.com/*'
 ```
 
@@ -48,7 +48,7 @@ apiVersion: v1
 kind: Secret
 metadata:
  name: aso-credential
- namespace: krateo-system
+ namespace: azure-pricing-system
 stringData:
  AZURE_SUBSCRIPTION_ID: # insert your subscription id
  AZURE_TENANT_ID:       # insert your tenant id
@@ -64,7 +64,7 @@ helm install krateo-oasgen-provider krateo/oasgen-provider -n krateo-system
 
 Install the [azure-pricing-rest-dynamic-controller-plugin](https://github.com/krateoplatformops/azure-pricing-rest-dynamic-controller-plugin):
 ```
-helm install azure-pricing-rest-dynamic-controller-plugin krateo/azure-pricing-rest-dynamic-controller-plugin -n krateo-system
+helm install azure-pricing-rest-dynamic-controller-plugin krateo/azure-pricing-rest-dynamic-controller-plugin -n azure-pricing-system
 ```
 
 Install the [focus-data-presentation-azure](https://github.com/krateoplatformops/focus-data-presentation-azure) composition definition:
@@ -76,7 +76,7 @@ metadata:
   annotations:
      "krateo.io/connector-verbose": "true"
   name: focus-data-presentation-azure
-  namespace: krateo-system
+  namespace: azure-pricing-system
 spec:
   chart:
     repo: focus-data-presentation-azure
@@ -92,13 +92,14 @@ apiVersion: composition.krateo.io/v0-1-0
 kind: FocusDataPresentationAzure
 metadata:
   name: finops-example-azure-vm-pricing
-  namespace: krateo-system
+  namespace: azure-pricing-system
 spec:
   annotationKey: krateo-finops-focus-resource
   filter: serviceName eq 'Virtual Machines' and armSkuName eq 'Standard_B2ats_v2' and armRegionName eq 'westus3' and type eq 'Consumption'
+  operatorFocusNamespace: krateo-system
   scraperConfig:
     tableName: pricing_table
-    pollingIntervalHours: 1
+    pollingInterval: "1h"
     scraperDatabaseConfigRef: 
       name: finops-database-handler
       namespace: krateo-system
@@ -114,7 +115,7 @@ metadata:
   annotations:
      "krateo.io/connector-verbose": "true"
   name: finops-example-pricing-vm-azure
-  namespace: krateo-system
+  namespace: azure-pricing-system
 spec:
   chart:
     repo: finops-example-pricing-vm-azure
