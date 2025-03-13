@@ -43,6 +43,7 @@ helm upgrade --install aso2 aso2/azure-service-operator \
 
 Create the secret with the credentials for the Azure operator
 ```
+kubectl create ns azure-pricing-system
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Secret
@@ -55,11 +56,6 @@ stringData:
  AZURE_CLIENT_ID:       # insert your client id
  AZURE_CLIENT_SECRET:   # insert your client secret
 EOF
-```
-
-Install [Krateo's Operator generator](https://github.com/krateoplatformops/oasgen-provider/):
-```
-helm install krateo-oasgen-provider krateo/oasgen-provider -n krateo-system
 ```
 
 Install the [azure-pricing-rest-dynamic-controller-plugin](https://github.com/krateoplatformops/azure-pricing-rest-dynamic-controller-plugin):
