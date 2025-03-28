@@ -7,6 +7,8 @@ vmPassword: Password123%
 armRegionName: westus3
 resourceGroupName: aso-sample-rg
 
+global:
+  tableName: finops
 
 portal:
   enabled: true
@@ -14,7 +16,7 @@ portal:
     icon: fa-cubes
   overview:
     enabled: true
-    text: Fireworksapp overview text
+    text: Example Pricing of a VM on Azure
   compositionstatus:
     enabled: true
   applicationstatus:
@@ -24,4 +26,6 @@ portal:
   events:
     enabled: true
   yamlviewer:
+    enabled: true
+  finops:
     enabled: true
