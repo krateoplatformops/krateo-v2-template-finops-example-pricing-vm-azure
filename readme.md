@@ -116,7 +116,7 @@ spec:
   chart:
     repo: finops-example-pricing-vm-azure
     url: https://charts.krateo.io
-    version: "0.1.1"
+    version: "0.1.2"
 EOF
 ```
 
