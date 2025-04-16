@@ -202,3 +202,10 @@ Finally, enable the cluster-wide external secrets for the krateo-system namespac
 ```
 kubectl label namespace krateo-system azure-secrets=enabled
 ```
+
+# Output Sample
+The FinOps tab will look like this when populated with metrics:
+
+<p align="center">
+<img src="/samples/sample_dashboard.png" width="400">
+</p>
