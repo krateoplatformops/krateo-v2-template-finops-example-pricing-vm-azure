@@ -207,5 +207,5 @@ kubectl label namespace krateo-system azure-secrets=enabled
 The FinOps tab will look like this when populated with metrics:
 
 <p align="center">
-<img src="/samples/sample_dashboard.png" width="400">
+<img src="/samples/sample_dashboard.png" width="800">
 </p>
