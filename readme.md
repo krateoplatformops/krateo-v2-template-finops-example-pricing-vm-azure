@@ -97,7 +97,7 @@ metadata:
   namespace: azure-pricing-system
 spec:
   annotationKey: krateo-finops-focus-resource
-  filter: serviceName eq 'Virtual Machines' and armSkuName eq 'Standard_B2ats_v2' and armRegionName eq 'westus3' and type eq 'Consumption'
+  filter: serviceName eq 'Virtual Machines' and armSkuName eq 'Standard_B2s' and armRegionName eq 'westus3' and type eq 'Consumption'
   operatorFocusNamespace: krateo-system
   scraperConfig:
     tableName: pricing_table
@@ -122,7 +122,7 @@ spec:
   chart:
     repo: finops-example-pricing-vm-azure
     url: https://charts.krateo.io
-    version: "0.1.2"
+    version: "0.1.3"
 EOF
 ```
 

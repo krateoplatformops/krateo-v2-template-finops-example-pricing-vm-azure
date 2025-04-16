@@ -20,7 +20,7 @@ portal:
   compositionstatus:
     enabled: true
   applicationstatus:
-    enabled: true
+    enabled: false
   terminal:
     enabled: false
   events:
