@@ -19,11 +19,15 @@ Additionally, it can be configured to utilize the new FinOps page in the composi
 ## Architecture
 This composition definition uses the components from the following architecture:
 
-![FinOps Data Presentation](_diagrams/architecture.png)
+<p align="center">
+<img src="/_diagrams/architecture.png" width="800">
+</p>
 
 ## Examples
-The following figure shows an example of the pricing information retrieved from the Azure Pricing API placed inside the widget card:
-![FinOps Data Presentation Example](_diagrams/example.png)
+The following figure shows an example of the pricing information retrieved from the Azure Pricing API, placed inside the side menu:
+<p align="center">
+<img src="/_diagrams/pricing_frontend.png" width="800">
+</p>
 
 <sub>Note: the `1 GB/Month` expenditure has been added thorugh the API as an example of multiple values and will not show when installing the composition.</sub>
 
@@ -207,5 +211,5 @@ kubectl label namespace krateo-system azure-secrets=enabled
 The FinOps tab will look like this when populated with metrics:
 
 <p align="center">
-<img src="/samples/sample_dashboard.png" width="800">
+<img src="/_diagrams/metrics_frontend.png" width="800">
 </p>
