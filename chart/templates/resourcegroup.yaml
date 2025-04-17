@@ -1,4 +1,4 @@
-{{- if not (lookup "resources.azure.com/v1api20200601" "ResourceGroup" .Release.Namespace .values.resourceGroupName ) -}}
+{{- if not (lookup "resources.azure.com/v1api20200601" "ResourceGroup" .Release.Namespace .Values.resourceGroupName ) -}}
 apiVersion: resources.azure.com/v1api20200601
 kind: ResourceGroup
 metadata:
