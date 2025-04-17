@@ -1,0 +1,214 @@
+apiVersion: v1
+kind: Secret
+metadata: 
+  name: azure-storage-account
+  namespace: krateo-system
+stringData:
+  server-url: https://<account_name>.blob.core.windows.net
+---
+apiVersion: v1
+kind: Secret
+metadata: 
+  name: azure-management-api
+  namespace: krateo-system
+stringData:
+  server-url: https://management.azure.com
+---
+apiVersion: finops.krateo.io/v1
+kind: ExporterScraperConfig
+metadata:
+  name: exporterscraperconfig-sample
+  namespace: krateo-system
+spec:
+  exporterConfig:
+    provider:
+      name: azure
+      namespace: krateo-system
+    api: 
+      path: /<container>/<directory>/<file_name>
+      verb: GET
+      headers:
+      - "x-ms-version: 2017-11-09"
+      endpointRef:
+        name: azure-storage-account
+        namespace: krateo-system
+    metricType: cost
+    pollingInterval: "1h"
+    additionalVariables:
+      account_name: # Your storage account name, compiled into the endpoint azure-storage-account
+      # These values could be different depending on how you setup your FOCUS export and logic app
+      container: focus
+      directory: exports
+      file_name: static-export.csv
+  scraperConfig:
+    pollingInterval: "1h"
+    tableName: finops # This table is used for costs and can be customized; resources usage will go in <table_name>_res
+    scraperDatabaseConfigRef: # This config is created by the krateo-installer
+      name: finops-database-handler
+      namespace: krateo-system
+---
+apiVersion: finops.krateo.io/v1
+kind: ProviderConfig
+metadata:
+  name: azure
+  namespace: krateo-system
+spec:
+  resourcesRef:
+  - name: azure-virtual-machines
+    namespace: krateo-system
+---
+apiVersion: finops.krateo.io/v1
+kind: ResourceConfig
+metadata:
+  name: azure-virtual-machines
+  namespace: krateo-system
+spec:
+  resourceFocusName: Virtual machine
+  metricsRef:
+  - name: azure-vm-cpu-usage
+    namespace: krateo-system
+---
+apiVersion: finops.krateo.io/v1
+kind: MetricConfig
+metadata:
+  name: azure-vm-cpu-usage
+  namespace: krateo-system
+spec:
+  metricName: Percentage CPU
+  endpoint:
+    resourcePrefixAPI:
+      endpointRef:
+        name: azure-management-api
+        namespace: krateo-system
+      verb: GET
+    resourceSuffix: /providers/microsoft.insights/metrics?api-version=2023-10-01&metricnames=%s&timespan=%s&interval=%s
+  timespan: month
+  interval: PT15M
+---
+## ----- external-secrets operator configuration  ----- 
+## ----------------------------------------------------
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterExternalSecret
+metadata:
+  name: azure-token-secret-management
+  namespace: krateo-system
+spec:
+  externalSecretSpec:
+    refreshInterval: 1h
+    secretStoreRef:
+      name: azure-token-store-management
+      kind: ClusterSecretStore
+    target:
+      name: azure-management-api
+      creationPolicy: Merge
+    data:
+      - secretKey: token
+        remoteRef:
+          key: access_token
+          property: access_token
+  # This is required for ClusterExternalSecret to know which namespaces to create the secret in
+  namespaceSelector:
+    matchLabels:
+      azure-secrets: enabled
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterExternalSecret
+metadata:
+  name: azure-token-secret-storage
+  namespace: krateo-system
+spec:
+  externalSecretSpec:
+    refreshInterval: 1h
+    secretStoreRef:
+      name: azure-token-store-storage
+      kind: ClusterSecretStore
+    target:
+      name: azure-storage-account
+      creationPolicy: Merge
+    data:
+      - secretKey: token
+        remoteRef:
+          key: access_token
+          property: access_token
+  # This is required for ClusterExternalSecret to know which namespaces to create the secret in
+  namespaceSelector:
+    matchLabels:
+      azure-secrets: enabled
+---
+# The external secret to request the bearer token to access usage metrics
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: azure-token-store-management
+  namespace: krateo-system
+spec:
+  provider:
+    webhook:
+      url: "https://login.microsoftonline.com/<YOUR TENANT ID>/oauth2/token?" # Add your tenant id
+      method: "POST"
+      body: "grant_type=client_credentials&client_id={{ .client_id.clientId }}&client_secret={{ .client_secret.clientSecret }}&resource=https://management.azure.com"
+      headers:
+        Content-Type: "application/x-www-form-urlencoded"
+      result:
+        jsonPath: "$.access_token"
+      secrets:
+        - name: client_id
+          secretRef:
+            name: azcli-id
+            key: clientId
+            namespace: krateo-system
+        - name: client_secret
+          secretRef:
+            name: azcli-sec
+            key: clientSecret
+            namespace: krateo-system
+      timeout: "30s"
+---
+# The external secret to request the bearer token to access the storage account
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: azure-token-store-storage
+  namespace: krateo-system
+spec:
+  provider:
+    webhook:
+      url: "https://login.microsoftonline.com/<YOUR TENANT ID>/oauth2/token?" # Add your tenant id
+      method: "POST"
+      body: "grant_type=client_credentials&client_id={{ .client_id.clientId }}&client_secret={{ .client_secret.clientSecret }}&resource=https://storage.azure.com"
+      headers:
+        Content-Type: "application/x-www-form-urlencoded"
+      result:
+        jsonPath: "$.access_token"
+      secrets:
+        - name: client_id
+          secretRef:
+            name: azcli-id
+            key: clientId
+            namespace: krateo-system
+        - name: client_secret
+          secretRef:
+            name: azcli-sec
+            key: clientSecret
+            namespace: krateo-system
+      timeout: "30s"
+---
+apiVersion: v1
+kind: Secret
+metadata: 
+  name: azcli-id
+  namespace: krateo-system
+  labels:
+    external-secrets.io/type: webhook
+stringData:
+  clientId: # Your client id
+---
+apiVersion: v1
+kind: Secret
+metadata: 
+  name: azcli-sec
+  namespace: krateo-system
+  labels:
+    external-secrets.io/type: webhook
+stringData:
+  clientSecret: # Your client secret

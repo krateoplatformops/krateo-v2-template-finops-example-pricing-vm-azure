@@ -1,11 +1,12 @@
 # Krateo FinOps Module Pricing Example
-
-This repository contains a Composition Definition for Krateo that leverages the Krateo Composable FinOps components to integrate resources create through the Azure Operator and the pricing visualization flow. The composition creates a Virtual Machine on Azure through the Azure operator, visualizing it in the frontend through a card widget and custom form. The widget shows the pricing information retrieved through the FinOps module.
+This repository contains a Composition Definition for Krateo that leverages the Krateo Composable FinOps components to integrate resources created through the Azure Operator and the pricing visualization flow. The composition creates a Virtual Machine on Azure through the Azure operator, visualizing it in the frontend through a card widget and custom form. The widget shows the pricing information retrieved through the FinOps module.
 
 It achieves so through the following components:
  - [finops-composition-definition-parser](https://github.com/krateoplatformops/finops-composition-definition-parser): this component parses the annotations contained in this chart, with the name `focus-resource-name`;
  - [azure-pricing-rest-dynamic-controller-plugin](https://github.com/krateoplatformops/azure-pricing-rest-dynamic-controller-plugin): plugin for the operator generator to gather data from the Azure pricing API;
  - [focus-data-presentation-azure](https://github.com/krateoplatformops/focus-data-presentation-azure): this composition definition integrates a custom resource for the generator operator that fetches data from the Azure pricing API and the custom resource for the FOCUS operator, which allows the fetched pricing information to be stored into the database.
+
+Additionally, it can be configured to utilize the new FinOps page in the composition portal basic. This page can be configured to show a breakdown of the costs of the composition and the usage metrics.
 
 ## Summary
 
@@ -13,15 +14,20 @@ It achieves so through the following components:
 2. [Architecture](#architecture)
 3. [Examples](#examples)
 4. [Installation](#Installation)
+5. [Cost and Usage Metrics](#cost-and-usage-metrics)
 
 ## Architecture
 This composition definition uses the components from the following architecture:
 
-![FinOps Data Presentation](_diagrams/architecture.png)
+<p align="center">
+<img src="/_diagrams/architecture.png" width="800">
+</p>
 
 ## Examples
-The following figure shows an example of the pricing information retrieved from the Azure Pricing API placed inside the widget card:
-![FinOps Data Presentation Example](_diagrams/example.png)
+The following figure shows an example of the pricing information retrieved from the Azure Pricing API, placed inside the side menu:
+<p align="center">
+<img src="/_diagrams/pricing_frontend.png" width="800">
+</p>
 
 <sub>Note: the `1 GB/Month` expenditure has been added thorugh the API as an example of multiple values and will not show when installing the composition.</sub>
 
@@ -91,7 +97,7 @@ metadata:
   namespace: azure-pricing-system
 spec:
   annotationKey: krateo-finops-focus-resource
-  filter: serviceName eq 'Virtual Machines' and armSkuName eq 'Standard_B2ats_v2' and armRegionName eq 'westus3' and type eq 'Consumption'
+  filter: serviceName eq 'Virtual Machines' and armSkuName eq 'Standard_B2s' and armRegionName eq 'westus3' and type eq 'Consumption'
   operatorFocusNamespace: krateo-system
   scraperConfig:
     tableName: pricing_table
@@ -116,7 +122,7 @@ spec:
   chart:
     repo: finops-example-pricing-vm-azure
     url: https://charts.krateo.io
-    version: "0.1.2"
+    version: "0.1.3"
 EOF
 ```
 
@@ -124,3 +130,86 @@ Finally, install the resources for the frontend: [customform.yaml](https://githu
 ```
 kubectl apply -f customform.yaml
 ```
+
+# Cost and Usage Metrics
+This section will cover how to configure the Krateo Composable FinOps to collect cost and usage metrics from the virtual machine just created on Azure.
+
+# Cost Metrics
+To start, you will need a storage account to store the FOCUS exports. If you do not already have it, you need to configure it: 
+1. go on your Azure dashboard and `Storage Accounts`, hit `Create` and select the `Blob Storage` mode. Then, follow the guided steps to complete the configuration. 
+2. go to `Access Control (IAM)`, then `Role Assignments` and add a new role assignment. Search for `Azure Blob Data Owner` and hit forward. Select the application that you use for the authentication. Finally, assign it.
+
+To configure the FOCUS exports on the storage account just created: 
+1. go on your dashboard and search for `Cost Management`.
+2. on the left pane, select `Exports`, then `Create`
+3. select the FOCUS export and how often the export should run. 
+4. select the storage account that you just created. 
+5. to use the `Logic App` provided below, set the container to `focus`, the directory to `exports` and the format to `CSV`, without compression and with overwrite.
+
+Now the export will run automatically to the storage account. However, it will place it inside a folder with the uid of the run, creating a dynamic path that cannot be known at runtime to configure the exporters and scrapers. Therefore, we will use a logic app to copy the export from the uid folder to a static location.
+
+Go back to the Azure dashboard and search for `Logic apps`. Then, create a new logic app with the tier you most prefer (the consumption tier is pretty cheap if used for this task only). When created, hit `Edit`, then graphic editor will open. Select `Code view` and paste the following code. 
+
+```json
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "triggers": {
+            "Recurrence": {
+                "type": "Recurrence",
+                "recurrence": {
+                    "frequency": "Day",
+                    "interval": 1,
+                    "schedule": {
+                        "hours": [
+                            1
+                        ],
+                        "minutes": [
+                            0
+                        ]
+                    },
+                    "timeZone": "UTC"
+                }
+            }
+        },
+        "actions": { }
+    }
+}
+```
+
+Select `Designer` to go back to the graphical view.
+
+Then, create the following objects:
+1. click on the plus below `Recurrence`, add an action, and on the right pane search `azure blob storage` and add `list blobs`, this will prompt to create a connection. Configure the connection to your storage account. Use the `Service principal authentication` and provide the client id and secret of the application to which you granted the `Azure Blob Data Owner` permissions (which is also the same you will use for the exporters' authentication). Set `Flat listing` to `Yes`.
+2. add another action by searching for `data operations` and adding `filter array`. Click on parameters, then the lightning and finally `value`. Then, in `Filter query`, select the lightning and `Name`, then in the filter `starts with` and in the value `part_`.
+3. add another `filter array`, in the data value choose the `fx` button, switch to `dynamic content` and select `Body`. Then, in the `Filter query` select `Body Name`, `ends with` and set the value to `.csv`.
+4. add one more action of the type `data operations`, but this time choose `compose`. In the `inputs` click on the `fx` button and then write `sort()` in the box that opens, select dynamic content and click `Body`, then add `LastModified`. The output should look like this:
+```
+sort(body('<YOUR PREVIOUS ACTION NAME>', 'LastModified'))
+```
+5. finally, add one last action by serach for `azure blob storage` and selecting `copy blobs`. Set the storage account name to your storage account, then the destination blob to `/focus/exports/static-export.csv`. For the source url, click on the `fx` button. Write `last()` then select `Dynamic content` and choose `Outputs` from the previous `Compose` action. Then add `?['Path']` at the end to select the right field of the object. Your `fx` should look like this:
+```
+last(outputs('<YOUR COMPOSE ACTION NAME>'))?['Path']
+```
+Set `Overwrite` to `Yes`.
+
+Now you can save and run the logic app. If you did everything right, you should see a successful run.
+
+## Usage Metrics
+No additional setup is required to obtain usage metrics from Azure.
+
+## Krateo Composable FinOps
+To start the exporter/scraper for all costs and CPU usage of VMs, see the following [sample](/samples/exporterscrapersample.yaml). It also includes the configuration for the external-secrets operator, which handles retrieving bearer tokens from Azure. See the installation instructions here: [Getting started](https://external-secrets.io/latest/introduction/getting-started/).
+
+Finally, enable the cluster-wide external secrets for the krateo-system namespace with:
+```
+kubectl label namespace krateo-system azure-secrets=enabled
+```
+
+# Output Sample
+The FinOps tab will look like this when populated with metrics:
+
+<p align="center">
+<img src="/_diagrams/metrics_frontend.png" width="800">
+</p>
