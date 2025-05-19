@@ -7,7 +7,7 @@
 {{- $vmId := $vm.status.id }}
 {{- $resourceSuffix := printf "/providers/microsoft.insights/metrics?api-version=2023-10-01&metricnames=%s&timespan=%s&interval=%s" .Values.metricExporter.metricName .Values.metricExporter.timespan .Values.metricExporter.interval }}
 
-{{- $fullName := printf "%s-%s" $vmName $metricName -}}
+{{- $fullName := printf "%s-%s" $vmName .Values.metricExporter.metricName -}}
 {{- $name := $fullName | lower | replace " " "-" | replace "_" "-" | trunc 63 | trimSuffix "-" -}}
 
 apiVersion: finops.krateo.io/v1
