@@ -1,6 +1,7 @@
 {{- $vmName := include "example-pricing-vm-azure.fullname" . }}
 {{- $vm := lookup "compute.azure.com/v1api20220301" "VirtualMachine" .Release.Namespace $vmName }}
 
+{{- if $vm }}
 {{- if eq $vm.status.provisioningState "Succeeded" }}
 {{- if $vm.status.id }}
 
@@ -31,5 +32,6 @@ spec:
       name: {{ .Values.scraperDatabaseConfigRef.name }}
       namespace: {{ .Release.Namespace }}
 
+{{- end }}
 {{- end }}
 {{- end }}
