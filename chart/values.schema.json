@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "additionalProperties": true,
+  "additionalProperties": false,
   "properties": {
     "armRegionName": {
       "default": "westus3",
@@ -128,7 +128,7 @@
       "type": "string"
     },
     "webhook": {
-      "additionalProperties": true,
+      "additionalProperties": false,
       "description": "Webhook configuration, the certificare and the service should match the OPA install\nDefault values match the krateo-installer",
       "properties": {
         "CA": {
@@ -175,42 +175,61 @@
           "type": "boolean"
         },
         "namespaceSelector": {
-          "type": "object",
           "description": "Adds a namespace selector to the admission controller webhook",
           "properties": {
             "matchExpressions": {
-              "type": "array",
-              "title": "matchExpressions",
               "items": {
-                "type": "object",
-                "required": [ "key", "operator", "values" ],
-                "properties": {
-                  "key": {
-                    "type": "string",
-                    "title": "key",
-                    "default": "openpolicyagent.org/webhook"
-                  },
-                  "operator": {
-                    "type": "string",
-                    "title": "operator",
-                    "default": "NotIn"
-                  },
-                  "values": {
-                    "type": "array",
-                    "title": "values",
-                    "items": {
-                      "type": "string"
-                    }
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "key": {
+                        "default": "openpolicyagent.org/webhook",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "NotIn",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "values": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "required": [],
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "values",
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "key",
+                      "operator",
+                      "values"
+                    ],
+                    "type": "object"
                   }
-                },
-                "additionalProperties": false
-              }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "matchExpressions",
+              "type": "array"
             }
           },
           "required": [
             "matchExpressions"
           ],
-          "additionalProperties": false
+          "title": "namespaceSelector",
+          "type": "object"
         },
         "service": {
           "additionalProperties": false,
