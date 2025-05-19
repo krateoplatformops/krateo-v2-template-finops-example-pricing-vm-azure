@@ -7,10 +7,13 @@
 {{- $vmId := $vm.status.id }}
 {{- $resourceSuffix := printf "/providers/microsoft.insights/metrics?api-version=2023-10-01&metricnames=%s&timespan=%s&interval=%s" .Values.metricExporter.metricName .Values.metricExporter.timespan .Values.metricExporter.interval }}
 
+{{- $fullName := printf "%s-%s" $vmName $metricName -}}
+{{- $name := $fullName | lower | replace " " "-" | replace "_" "-" | trunc 63 | trimSuffix "-" -}}
+
 apiVersion: finops.krateo.io/v1
 kind: ExporterScraperConfig
 metadata:
-  name: {{ $vmName-$metricName | lower | replace " " "-" | replace "_" "-" | trunc 63 | trimSuffix "-" }}
+  name: {{ $name }}
 spec:
   exporterConfig:
     api: 
