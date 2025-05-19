@@ -61,3 +61,12 @@ portal:
     enabled: true
   finops:
     enabled: true
+
+metricExporter:
+  timespan: "month"
+  interval: "PT15M"
+  metricName: "Percentage CPU"
+  tableName: finops_res
+  pollingInterval: "1h"
+  scraperDatabaseConfigRef:
+    name: finops-database-handler

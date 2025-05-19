@@ -8,6 +8,67 @@
       "title": "armRegionName",
       "type": "string"
     },
+    "metricExporter": {
+      "additionalProperties": false,
+      "properties": {
+        "interval": {
+          "default": "PT15M",
+          "required": [],
+          "title": "interval",
+          "type": "string"
+        },
+        "metricName": {
+          "default": "Percentage CPU",
+          "required": [],
+          "title": "metricName",
+          "type": "string"
+        },
+        "pollingInterval": {
+          "default": "1h",
+          "required": [],
+          "title": "pollingInterval",
+          "type": "string"
+        },
+        "scraperDatabaseConfigRef": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "default": "finops-database-handler",
+              "required": [],
+              "title": "name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "title": "scraperDatabaseConfigRef",
+          "type": "object"
+        },
+        "tableName": {
+          "default": "finops_res",
+          "required": [],
+          "title": "tableName",
+          "type": "string"
+        },
+        "timespan": {
+          "default": "month",
+          "required": [],
+          "title": "timespan",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timespan",
+        "interval",
+        "metricName",
+        "tableName",
+        "pollingInterval",
+        "scraperDatabaseConfigRef"
+      ],
+      "title": "metricExporter",
+      "type": "object"
+    },
     "name": {
       "default": "aso-sample",
       "required": [],
@@ -222,7 +283,8 @@
     "armRegionName",
     "resourceGroupName",
     "optimization",
-    "webhook"
+    "webhook",
+    "metricExporter"
   ],
   "type": "object"
 }
