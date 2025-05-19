@@ -203,6 +203,9 @@ Now you can save and run the logic app. If you did everything right, you should 
 No additional setup is required to obtain usage metrics from Azure.
 The Helm chart already includes an `exporterscraperconfig.yaml` file among its templates, which contains the configuration for the exporters and scrapers related to usage metrics.
 
+## Optimizations
+The optimizations rely on Open Policy Agent. The instances of this composition definition will install it automatically through the [finops-webhook-template-chart](https://github.com/krateoplatformops/finops-webhook-template-chart), which is imported as a dependency. The template checks whether the webhook already exists, if it does not then it creates it, otherwise it does nothing.
+
 ## Krateo Composable FinOps
 To start the exporter/scraper for all costs and CPU usage of VMs, see the following [sample](/samples/exporterscrapersample.yaml). It also includes the configuration for the external-secrets operator, which handles retrieving bearer tokens from Azure. See the installation instructions here: [Getting started](https://external-secrets.io/latest/introduction/getting-started/).
 

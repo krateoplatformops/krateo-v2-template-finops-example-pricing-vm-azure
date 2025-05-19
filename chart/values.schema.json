@@ -75,6 +75,12 @@
       "title": "name",
       "type": "string"
     },
+    "optimization": {
+      "default": "The resource utilization and the proposed optimization for the given resource.",
+      "required": [],
+      "title": "optimization",
+      "type": "string"
+    },
     "resourceGroupName": {
       "default": "aso-sample-rg",
       "required": [],
@@ -104,6 +110,168 @@
       "required": [],
       "title": "vmSize",
       "type": "string"
+    },
+    "webhook": {
+      "additionalProperties": false,
+      "description": "Webhook configuration, the certificare and the service should match the OPA install\nDefault values match the krateo-installer",
+      "properties": {
+        "CA": {
+          "default": "",
+          "description": "Otherwise it will use the CA Bundle specified in CA",
+          "required": [],
+          "title": "CA",
+          "type": "string"
+        },
+        "certsSecretRef": {
+          "additionalProperties": false,
+          "description": "The webhook lookup will look for the field \"caBundle\"",
+          "properties": {
+            "name": {
+              "default": "opa-kube-mgmt-cert",
+              "required": [],
+              "title": "name",
+              "type": "string"
+            },
+            "namespace": {
+              "default": "opa-system",
+              "required": [],
+              "title": "namespace",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "namespace"
+          ],
+          "title": "certsSecretRef",
+          "type": "object"
+        },
+        "fullnameOverride": {
+          "default": "mutating-webhook-finopsexamplepricingvmazures",
+          "required": [],
+          "title": "fullnameOverride",
+          "type": "string"
+        },
+        "generatedCerts": {
+          "default": true,
+          "required": [],
+          "title": "generatedCerts",
+          "type": "boolean"
+        },
+        "namespaceSelector": {
+          "additionalProperties": false,
+          "description": "Adds a namespace selector to the admission controller webhook",
+          "properties": {
+            "matchExpressions": {
+              "items": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "key": {
+                        "default": "openpolicyagent.org/webhook",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "NotIn",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "values": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "required": [],
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "values",
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "key",
+                      "operator",
+                      "values"
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "matchExpressions",
+              "type": "array"
+            }
+          },
+          "required": [
+            "matchExpressions"
+          ],
+          "title": "namespaceSelector",
+          "type": "object"
+        },
+        "service": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "default": "opa-kube-mgmt",
+              "required": [],
+              "title": "name",
+              "type": "string"
+            },
+            "namespace": {
+              "default": "opa-system",
+              "required": [],
+              "title": "namespace",
+              "type": "string"
+            },
+            "port": {
+              "default": 8181,
+              "required": [],
+              "title": "port",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "name",
+            "namespace",
+            "port"
+          ],
+          "title": "service",
+          "type": "object"
+        },
+        "sideEffect": {
+          "default": "None",
+          "description": "SideEffectClass for the webhook, setting to NoneOnDryRun enables dry-run.\nOnly None and NoneOnDryRun are permitted for admissionregistration.k8s.io/v1.",
+          "required": [],
+          "title": "sideEffect",
+          "type": "string"
+        },
+        "useHttps": {
+          "default": true,
+          "required": [],
+          "title": "useHttps",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "fullnameOverride",
+        "namespaceSelector",
+        "sideEffect",
+        "useHttps",
+        "generatedCerts",
+        "certsSecretRef",
+        "CA",
+        "service"
+      ],
+      "title": "webhook",
+      "type": "object"
     }
   },
   "required": [
@@ -114,6 +282,8 @@
     "vmPassword",
     "armRegionName",
     "resourceGroupName",
+    "optimization",
+    "webhook",
     "metricExporter"
   ],
   "type": "object"
