@@ -175,61 +175,29 @@
           "type": "boolean"
         },
         "namespaceSelector": {
-          "description": "Adds a namespace selector to the admission controller webhook",
-          "properties": {
-            "matchExpressions": {
-              "items": {
-                "anyOf": [
-                  {
-                    "additionalProperties": false,
-                    "properties": {
-                      "key": {
-                        "default": "openpolicyagent.org/webhook",
-                        "required": [],
-                        "title": "key",
-                        "type": "string"
-                      },
-                      "operator": {
-                        "default": "NotIn",
-                        "required": [],
-                        "title": "operator",
-                        "type": "string"
-                      },
-                      "values": {
-                        "items": {
-                          "anyOf": [
-                            {
-                              "required": [],
-                              "type": "string"
+            "properties": {
+                "matchExpressions": {
+                    "items": {
+                        "properties": {
+                            "key": {
+                                "type": "string"
+                            },
+                            "operator": {
+                                "type": "string"
+                            },
+                            "values": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
                             }
-                          ],
-                          "required": []
                         },
-                        "required": [],
-                        "title": "values",
-                        "type": "array"
-                      }
+                        "type": "object"
                     },
-                    "required": [
-                      "key",
-                      "operator",
-                      "values"
-                    ],
-                    "type": "object"
-                  }
-                ],
-                "required": []
-              },
-              "required": [],
-              "title": "matchExpressions",
-              "type": "array"
-            }
-          },
-          "required": [
-            "matchExpressions"
-          ],
-          "title": "namespaceSelector",
-          "type": "object"
+                    "type": "array"
+                }
+            },
+            "type": "object"
         },
         "service": {
           "additionalProperties": false,
