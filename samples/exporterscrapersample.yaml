@@ -21,9 +21,6 @@ metadata:
   namespace: krateo-system
 spec:
   exporterConfig:
-    provider:
-      name: azure
-      namespace: krateo-system
     api: 
       path: /<container>/<directory>/<file_name>
       verb: GET
@@ -46,44 +43,6 @@ spec:
     scraperDatabaseConfigRef: # This config is created by the krateo-installer
       name: finops-database-handler
       namespace: krateo-system
----
-apiVersion: finops.krateo.io/v1
-kind: ProviderConfig
-metadata:
-  name: azure
-  namespace: krateo-system
-spec:
-  resourcesRef:
-  - name: azure-virtual-machines
-    namespace: krateo-system
----
-apiVersion: finops.krateo.io/v1
-kind: ResourceConfig
-metadata:
-  name: azure-virtual-machines
-  namespace: krateo-system
-spec:
-  resourceFocusName: Virtual machine
-  metricsRef:
-  - name: azure-vm-cpu-usage
-    namespace: krateo-system
----
-apiVersion: finops.krateo.io/v1
-kind: MetricConfig
-metadata:
-  name: azure-vm-cpu-usage
-  namespace: krateo-system
-spec:
-  metricName: Percentage CPU
-  endpoint:
-    resourcePrefixAPI:
-      endpointRef:
-        name: azure-management-api
-        namespace: krateo-system
-      verb: GET
-    resourceSuffix: /providers/microsoft.insights/metrics?api-version=2023-10-01&metricnames=%s&timespan=%s&interval=%s
-  timespan: month
-  interval: PT15M
 ---
 ## ----- external-secrets operator configuration  ----- 
 ## ----------------------------------------------------
