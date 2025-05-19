@@ -9,7 +9,7 @@
       "type": "string"
     },
     "global": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "tableName": {
           "default": "finops",
@@ -249,8 +249,6 @@
         "sideEffect",
         "useHttps",
         "generatedCerts",
-        "certsSecretRef",
-        "CA",
         "service"
       ],
       "title": "webhook",
