@@ -29,16 +29,16 @@ The following figure shows an example of the pricing information retrieved from 
 <img src="/_diagrams/pricing_frontend.png" width="800">
 </p>
 
-<sub>Note: the `1 GB/Month` expenditure has been added thorugh the API as an example of multiple values and will not show when installing the composition.</sub>
+<sub>Note: The `1 GB/Month` expenditure has been added through the API as an example of multiple values and will not appear when installing the composition.</sub>
 
 ## Installation
 Install the cert-manager for the Azure operator:
-```
+```sh
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.3/cert-manager.yaml
 ```
 
-Install the Azure operator:
-```
+Install the Azure operator (Azure Service Operator v2):
+```sh
 helm repo add aso2 https://raw.githubusercontent.com/Azure/azure-service-operator/main/v2/charts
 helm repo update
 helm upgrade --install aso2 aso2/azure-service-operator \
@@ -48,7 +48,7 @@ helm upgrade --install aso2 aso2/azure-service-operator \
 ```
 
 Create the secret with the credentials for the Azure operator
-```
+```sh
 kubectl create ns azure-pricing-system
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -65,12 +65,12 @@ EOF
 ```
 
 Install the [azure-pricing-rest-dynamic-controller-plugin](https://github.com/krateoplatformops/azure-pricing-rest-dynamic-controller-plugin):
-```
+```sh
 helm install azure-pricing-rest-dynamic-controller-plugin krateo/azure-pricing-rest-dynamic-controller-plugin -n azure-pricing-system
 ```
 
 Install the [focus-data-presentation-azure](https://github.com/krateoplatformops/focus-data-presentation-azure) composition definition:
-```
+```sh
 cat <<EOF | kubectl apply -f -
 apiVersion: core.krateo.io/v1alpha1
 kind: CompositionDefinition
@@ -88,7 +88,7 @@ EOF
 ```
 
 Install the composition for the [focus-data-presentation-azure](https://github.com/krateoplatformops/focus-data-presentation-azure), which creates the `DataPresentationAzure` resource, managed by the [rest-dynamic-controller](https://github.com/krateoplatformops/rest-dynamic-controller). Then, the [composition-dynamic-controller](https://github.com/krateoplatformops/composition-dynamic-controller) will install the FocusConfig for the [finops-operator-focus](https://github.com/krateoplatformops/finops-operator-focus), which will start the exporter/scraper flow.
-```
+```sh
 cat <<EOF | kubectl apply -f -
 apiVersion: composition.krateo.io/v0-1-0
 kind: FocusDataPresentationAzure
@@ -109,7 +109,7 @@ EOF
 ```
 
 Install the composition definition for this component:
-```
+```sh
 cat <<EOF | kubectl apply -f -
 apiVersion: core.krateo.io/v1alpha1
 kind: CompositionDefinition
@@ -127,12 +127,15 @@ EOF
 ```
 
 Finally, install the resources for the frontend: [customform.yaml](https://github.com/krateoplatformops/finops-example-pricing-vm-azure/blob/main/customform.yaml).
-```
+```sh
 kubectl apply -f customform.yaml
 ```
 
 # Cost and Usage Metrics
 This section will cover how to configure the Krateo Composable FinOps to collect cost and usage metrics from the virtual machine just created on Azure.
+
+> [!NOTE]  
+> The Azure Portal UI may change over time, so some steps or visuals might differ slightly from what is described here.
 
 # Cost Metrics
 To start, you will need a storage account to store the FOCUS exports. If you do not already have it, you need to configure it: 
@@ -146,9 +149,9 @@ To configure the FOCUS exports on the storage account just created:
 4. select the storage account that you just created. 
 5. to use the `Logic App` provided below, set the container to `focus`, the directory to `exports` and the format to `CSV`, without compression and with overwrite.
 
-Now the export will run automatically to the storage account. However, it will place it inside a folder with the uid of the run, creating a dynamic path that cannot be known at runtime to configure the exporters and scrapers. Therefore, we will use a logic app to copy the export from the uid folder to a static location.
+Now the export will run automatically to the storage account. However, it will place it inside a folder with the `uid`of the run, creating a dynamic path that cannot be known at runtime to configure the exporters and scrapers. Therefore, we will use a `Logic App` to copy the export from the `uid` folder to a static location.
 
-Go back to the Azure dashboard and search for `Logic apps`. Then, create a new logic app with the tier you most prefer (the consumption tier is pretty cheap if used for this task only). When created, hit `Edit`, then graphic editor will open. Select `Code view` and paste the following code. 
+Go back to the Azure dashboard and search for `Logic apps`. Then, create a new `Logic App` with the tier you most prefer (the consumption tier is pretty cheap if used for this task only). When created, hit `Edit`, then graphic editor will open. Select `Code view` and paste the following code. 
 
 ```json
 {
@@ -198,6 +201,10 @@ Now you can save and run the logic app. If you did everything right, you should 
 
 ## Usage Metrics
 No additional setup is required to obtain usage metrics from Azure.
+The Helm chart already includes an `exporterscraperconfig.yaml` file among its templates, which contains the configuration for the exporters and scrapers related to usage metrics.
+
+## Optimizations
+The optimizations rely on Open Policy Agent. The instances of this composition definition will install it automatically through the [finops-webhook-template-chart](https://github.com/krateoplatformops/finops-webhook-template-chart), which is imported as a dependency. The template checks whether the webhook already exists, if it does not then it creates it, otherwise it does nothing.
 
 ## Krateo Composable FinOps
 To start the exporter/scraper for all costs and CPU usage of VMs, see the following [sample](/samples/exporterscrapersample.yaml). It also includes the configuration for the external-secrets operator, which handles retrieving bearer tokens from Azure. See the installation instructions here: [Getting started](https://external-secrets.io/latest/introduction/getting-started/).
