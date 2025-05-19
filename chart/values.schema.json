@@ -128,7 +128,7 @@
       "type": "string"
     },
     "webhook": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Webhook configuration, the certificare and the service should match the OPA install\nDefault values match the krateo-installer",
       "properties": {
         "CA": {
