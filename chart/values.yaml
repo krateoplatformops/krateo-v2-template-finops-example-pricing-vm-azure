@@ -19,7 +19,10 @@ webhook:
   # Adds a namespace selector to the admission controller webhook
   namespaceSelector:
     matchExpressions:
-      - {key: openpolicyagent.org/webhook, operator: NotIn, values: [ignore]}
+    - key: openpolicyagent.org/webhook
+      operator: NotIn
+      values: 
+        - ignore
 
   # SideEffectClass for the webhook, setting to NoneOnDryRun enables dry-run.
   # Only None and NoneOnDryRun are permitted for admissionregistration.k8s.io/v1.

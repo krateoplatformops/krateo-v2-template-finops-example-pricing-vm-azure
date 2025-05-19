@@ -175,62 +175,42 @@
           "type": "boolean"
         },
         "namespaceSelector": {
-          "additionalProperties": false,
+          "type": "object",
           "description": "Adds a namespace selector to the admission controller webhook",
           "properties": {
             "matchExpressions": {
-              "items": {
-                "anyOf": [
-                  {
-                    "additionalProperties": false,
-                    "properties": {
-                      "key": {
-                        "default": "openpolicyagent.org/webhook",
-                        "required": [],
-                        "title": "key",
-                        "type": "string"
-                      },
-                      "operator": {
-                        "default": "NotIn",
-                        "required": [],
-                        "title": "operator",
-                        "type": "string"
-                      },
-                      "values": {
-                        "items": {
-                          "anyOf": [
-                            {
-                              "required": [],
-                              "type": "string"
-                            }
-                          ],
-                          "required": []
-                        },
-                        "required": [],
-                        "title": "values",
-                        "type": "array"
-                      }
-                    },
-                    "required": [
-                      "key",
-                      "operator",
-                      "values"
-                    ],
-                    "type": "object"
-                  }
-                ],
-                "required": []
-              },
-              "required": [],
+              "type": "array",
               "title": "matchExpressions",
-              "type": "array"
+              "items": {
+                "type": "object",
+                "required": [ "key", "operator", "values" ],
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "title": "key",
+                    "default": "openpolicyagent.org/webhook"
+                  },
+                  "operator": {
+                    "type": "string",
+                    "title": "operator",
+                    "default": "NotIn"
+                  },
+                  "values": {
+                    "type": "array",
+                    "title": "values",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
             }
           },
           "required": [
             "matchExpressions"
           ],
-          "title": "namespaceSelector",
-          "type": "object"
+          "additionalProperties": false
         },
         "service": {
           "additionalProperties": false,
