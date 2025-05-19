@@ -8,6 +8,22 @@
       "title": "armRegionName",
       "type": "string"
     },
+    "global": {
+      "additionalProperties": false,
+      "properties": {
+        "tableName": {
+          "default": "finops",
+          "required": [],
+          "title": "tableName",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tableName"
+      ],
+      "title": "global",
+      "type": "object"
+    },
     "metricExporter": {
       "additionalProperties": false,
       "properties": {
@@ -284,6 +300,8 @@
     "resourceGroupName",
     "optimization",
     "webhook",
+    "global",
+    "portal",
     "metricExporter"
   ],
   "type": "object"
