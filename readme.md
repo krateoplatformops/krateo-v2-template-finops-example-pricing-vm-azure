@@ -203,6 +203,8 @@ Now you can save and run the logic app. If you did everything right, you should 
 No additional setup is required to obtain usage metrics from Azure.
 The Helm chart already includes an `exporterscraperconfig.yaml` file among its templates, which contains the configuration for the exporters and scrapers related to usage metrics.
 
+The specified `timespan` is computed through the helper file `_dates.tpl`. It can be used as is, or customized to include additional ranges. The usage example can be found in the template of the ExporterScraperConfig.
+
 ## Optimizations
 The optimizations rely on Open Policy Agent. The instances of this composition definition will install it automatically through the [finops-webhook-template-chart](https://github.com/krateoplatformops/finops-webhook-template-chart), which is imported as a dependency. The template checks whether the webhook already exists, if it does not then it creates it, otherwise it does nothing.
 
