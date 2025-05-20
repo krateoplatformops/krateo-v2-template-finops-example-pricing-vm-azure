@@ -73,3 +73,4 @@ metricExporter:
   pollingInterval: "1h"
   scraperDatabaseConfigRef:
     name: finops-database-handler
+    namespace: krateo-system

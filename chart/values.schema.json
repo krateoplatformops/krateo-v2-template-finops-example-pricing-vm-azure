@@ -53,6 +53,12 @@
               "required": [],
               "title": "name",
               "type": "string"
+            },
+            "namespace": {
+              "default": "krateo-system",
+              "required": [],
+              "title": "namespace",
+              "type": "string"
             }
           },
           "required": [
