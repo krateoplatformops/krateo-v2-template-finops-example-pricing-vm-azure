@@ -29,8 +29,8 @@ spec:
     pollingInterval: {{ .Values.pollingInterval | quote }}
     tableName: {{ .Values.tableName }}
     scraperDatabaseConfigRef:
-      name: {{ .Values.scraperDatabaseConfigRef.name }}
-      namespace: {{ .Release.Namespace }}
+      name: {{ .Values.metricExporter.scraperDatabaseConfigRef.name }}
+      namespace: {{ .Values.metricExporter.scraperDatabaseConfigRef.namespace }}
 
 {{- end }}
 {{- end }}

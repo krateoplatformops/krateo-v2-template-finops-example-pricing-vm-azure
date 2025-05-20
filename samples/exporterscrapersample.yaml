@@ -46,7 +46,7 @@ spec:
 ---
 ## ----- external-secrets operator configuration  ----- 
 ## ----------------------------------------------------
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ClusterExternalSecret
 metadata:
   name: azure-token-secret-management
@@ -70,7 +70,7 @@ spec:
     matchLabels:
       azure-secrets: enabled
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ClusterExternalSecret
 metadata:
   name: azure-token-secret-storage
@@ -95,7 +95,7 @@ spec:
       azure-secrets: enabled
 ---
 # The external secret to request the bearer token to access usage metrics
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ClusterSecretStore
 metadata:
   name: azure-token-store-management
@@ -124,7 +124,7 @@ spec:
       timeout: "30s"
 ---
 # The external secret to request the bearer token to access the storage account
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ClusterSecretStore
 metadata:
   name: azure-token-store-storage
