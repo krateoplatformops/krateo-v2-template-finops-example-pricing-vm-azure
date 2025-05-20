@@ -23,7 +23,7 @@ spec:
       endpointRef:
         name: azure-management-api
         namespace: {{ .Release.Namespace }}
-    metricType: usage
+    metricType: Resource
     pollingInterval: {{ .Values.pollingInterval | quote }}
   scraperConfig:
     pollingInterval: {{ .Values.pollingInterval | quote }}
