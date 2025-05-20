@@ -66,7 +66,7 @@ portal:
     enabled: true
 
 metricExporter:
-  timespan: "month"
+  timespan: "month" # one of day, month, year, see helper dates for customization
   interval: "PT15M"
   metricName: "Percentage CPU"
   tableName: finops_res

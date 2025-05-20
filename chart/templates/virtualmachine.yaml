@@ -1,7 +1,7 @@
 apiVersion: compute.azure.com/v1api20220301
 kind: VirtualMachine
 metadata:
-  name: {{ include "example-pricing-vm-azure.fullname" . }}
+  name: {{ .Values.name }}
   annotations: 
     krateo-finops-focus-resource: '["{{ .Values.vmSize }}"]'
 spec:

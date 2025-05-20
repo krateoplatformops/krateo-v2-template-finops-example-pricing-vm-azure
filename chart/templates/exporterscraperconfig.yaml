@@ -1,12 +1,15 @@
-{{- $vmName := include "example-pricing-vm-azure.fullname" . }}
+{{- $vmName := .Values.name }}
 {{- $vm := lookup "compute.azure.com/v1api20220301" "VirtualMachine" .Release.Namespace $vmName }}
 
 {{- if $vm }}
 {{- if eq $vm.status.provisioningState "Succeeded" }}
 {{- if $vm.status.id }}
+{{- $currentDate := now }}
+{{- $backupRange := list .Values.metricExporter.timespan $currentDate.Year $currentDate.Month $currentDate.Day | include "dates.dateRange" }}
 
 {{- $vmId := $vm.status.id }}
-{{- $resourceSuffix := printf "/providers/microsoft.insights/metrics?api-version=2023-10-01&metricnames=%s&timespan=%s&interval=%s" .Values.metricExporter.metricName .Values.metricExporter.timespan .Values.metricExporter.interval }}
+{{- $metricName := .Values.metricExporter.metricName | replace " " "%20" -}}
+{{- $resourceSuffix := printf "/providers/microsoft.insights/metrics?api-version=2023-10-01&metricnames=%s&timespan=%s&interval=%s" $metricName $backupRange .Values.metricExporter.interval }}
 
 {{- $fullName := printf "%s-%s" $vmName .Values.metricExporter.metricName -}}
 {{- $name := $fullName | lower | replace " " "-" | replace "_" "-" | trunc 63 | trimSuffix "-" -}}
@@ -18,7 +21,7 @@ metadata:
 spec:
   exporterConfig:
     api: 
-      path: {{ printf "%s%s" $vmId $resourceSuffix }}
+      path: {{ printf "%s%s" $vmId $resourceSuffix | quote }}
       verb: GET
       endpointRef:
         name: azure-management-api
