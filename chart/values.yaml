@@ -44,7 +44,6 @@ webhook:
 
 global:
   tableName: finops
-  krateoNamespace: krateoNamespace
   
 portal:
   enabled: true
