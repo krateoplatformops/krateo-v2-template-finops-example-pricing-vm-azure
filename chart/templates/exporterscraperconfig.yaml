@@ -26,7 +26,7 @@ spec:
       verb: GET
       endpointRef:
         name: azure-management-api
-        namespace: {{ .Values.global.krateoNamespace }}
+        namespace: {{ .Release.Namespace }}
     metricType: Resource
     pollingInterval: {{ .Values.metricExporter.pollingInterval | quote }}
   scraperConfig:
