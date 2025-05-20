@@ -24,10 +24,10 @@ spec:
         name: azure-management-api
         namespace: {{ .Release.Namespace }}
     metricType: Resource
-    pollingInterval: {{ .Values.pollingInterval | quote }}
+    pollingInterval: {{ .Values.metricExporter.pollingInterval | quote }}
   scraperConfig:
-    pollingInterval: {{ .Values.pollingInterval | quote }}
-    tableName: {{ .Values.tableName }}
+    pollingInterval: {{ .Values.metricExporter.pollingInterval | quote }}
+    tableName: {{ .Values.metricExporter.tableName }}
     scraperDatabaseConfigRef:
       name: {{ .Values.metricExporter.scraperDatabaseConfigRef.name }}
       namespace: {{ .Values.metricExporter.scraperDatabaseConfigRef.namespace }}
