@@ -18,7 +18,7 @@ metadata:
 spec:
   exporterConfig:
     api: 
-      path: {{ $vmId | quote }}{{ $resourceSuffix | quote }}
+      path: {{ printf "%s%s" $vmId $resourceSuffix }}
       verb: GET
       endpointRef:
         name: azure-management-api
