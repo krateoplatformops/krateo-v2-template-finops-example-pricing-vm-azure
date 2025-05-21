@@ -44,6 +44,7 @@ webhook:
 
 global:
   tableName: finops
+  krateoNamespace: krateo-system # This is temporary and will have to be removed when the cdc-chart inspector passing of values functionality is added
   
 portal:
   enabled: true

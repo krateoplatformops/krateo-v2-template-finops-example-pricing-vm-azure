@@ -16,10 +16,17 @@
           "required": [],
           "title": "tableName",
           "type": "string"
+        },
+        "krateoNamespace": {
+          "default": "krateo-system",
+          "required": [],
+          "title": "krateoNamespace",
+          "type": "string"
         }
       },
       "required": [
-        "tableName"
+        "tableName",
+        "krateoNamespace"
       ],
       "title": "global",
       "type": "object"

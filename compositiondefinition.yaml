@@ -4,7 +4,7 @@ metadata:
   annotations:
      "krateo.io/connector-verbose": "true"
   name: finops-example-pricing-vm-azure
-  namespace: krateo-system
+  namespace: azure-pricing-system
 spec:
   chart:
     repo: finops-example-pricing-vm-azure
