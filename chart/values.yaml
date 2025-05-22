@@ -49,10 +49,10 @@ global:
 portal:
   enabled: true
   card:
-    icon: fa-cubes
+    icon: fa-hand-holding-dollar
   overview:
     enabled: true
-    text: Example Pricing of a VM on Azure
+    text: Example Pricing, Costs and Usage of a Virtual Machine on Azure
   compositionstatus:
     enabled: true
   applicationstatus:
@@ -66,12 +66,18 @@ portal:
   finops:
     enabled: true
 
+# Values for the ExporterScraperConfig, collecting data on the VM created
 metricExporter:
   timespan: "month" # one of day, month, year, see helper dates for customization
   interval: "PT15M"
   metricName: "Percentage CPU"
-  tableName: finops_res
   pollingInterval: "1h"
   scraperDatabaseConfigRef:
     name: finops-database-handler
     namespace: krateo-system
+
+# Values for the Moving Window microservice endpoint secret
+policyAdditionalValues:
+  optimizationServiceEndpointRef:
+    name: finops-moving-window-microservice-endpoint
+    namespace: opa-system
