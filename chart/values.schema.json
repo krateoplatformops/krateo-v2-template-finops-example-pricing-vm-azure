@@ -74,12 +74,6 @@
           "title": "scraperDatabaseConfigRef",
           "type": "object"
         },
-        "tableName": {
-          "default": "finops_res",
-          "required": [],
-          "title": "tableName",
-          "type": "string"
-        },
         "timespan": {
           "default": "month",
           "required": [],
@@ -91,7 +85,6 @@
         "timespan",
         "interval",
         "metricName",
-        "tableName",
         "pollingInterval",
         "scraperDatabaseConfigRef"
       ],
