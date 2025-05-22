@@ -26,12 +26,14 @@ spec:
       verb: GET
       endpointRef:
         name: azure-management-api
-        namespace: {{ .Release.Namespace }}
-    metricType: Resource
+        namespace: {{ .Values.global.krateoNamespace }}
+    metricType: resource
     pollingInterval: {{ .Values.metricExporter.pollingInterval | quote }}
+    additionalVariables:
+      ResourceId: {{ $vmId }}
   scraperConfig:
     pollingInterval: {{ .Values.metricExporter.pollingInterval | quote }}
-    tableName: {{ .Values.metricExporter.tableName }}
+    tableName: {{ .Values.global.tableName }}_res
     scraperDatabaseConfigRef:
       name: {{ .Values.metricExporter.scraperDatabaseConfigRef.name }}
       namespace: {{ .Values.metricExporter.scraperDatabaseConfigRef.namespace }}

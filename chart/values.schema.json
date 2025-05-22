@@ -98,12 +98,45 @@
       "title": "metricExporter",
       "type": "object"
     },
+    "policyAdditionalValues": {
+      "additionalProperties": false,
+      "properties": {
+        "optimizationServiceEndpointRef": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "default": "finops-moving-window-microservice-endpoint",
+              "required": [],
+              "title": "name",
+              "type": "string"
+            },
+            "namespace": {
+              "default": "opa-system",
+              "required": [],
+              "title": "namespace",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "title": "optimizationServiceEndpointRef",
+          "type": "object"
+        }
+      },
+      "required": [
+        "optimizationServiceEndpointRef"
+      ],
+      "title": "policyAdditionalValues",
+      "type": "object"
+    },
     "name": {
       "default": "aso-sample",
       "required": [],
       "title": "name",
       "type": "string"
     },
+    
     "optimization": {
       "default": "The resource utilization and the proposed optimization for the given resource.",
       "required": [],
