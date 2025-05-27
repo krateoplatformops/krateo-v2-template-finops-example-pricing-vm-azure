@@ -33,16 +33,35 @@ events on all composition
 definitions
 }
 
+object "ServiceProvider" {
+  Azure, GCP, AWS, ...
+}
+
+object "OPA" {
+  Moving Window policy
+}
+
+component "finops-moving-window-microservice"
+component "finops-webhook-template"
+
 
 CompositionDefinition <- "composition-definition-parser" : Download Helm chart
-"finops-database-handler" <- "composition-definition-parser" : \n\n\nParse and\nstore annotations
+"finops-database-handler" <- "composition-definition-parser" : "\nParse and\nstore annotations"
 
+CompositionDefinition --> ServiceProvider : "Create new\nresources"
+ServiceProvider --> "finops-database-handler" : "Exporter/Scraper\nstore Cost/Usage data"
+"finops-moving-window-microservice" <--> "finops-database-handler" : "\n\n\nUsage data"
+OPA <-- "finops-moving-window-microservice" : "\n\n\n\n\n\nOptimization"
 
-"finops-database-handler" <-> CrateDB : Pricing\ninformation
+"finops-database-handler" <--> CrateDB
 Template <-- "finops-database-handler" : Detailed or\nAggregated\nCosts
-Template ---> "finops-database-handler" : \n\n\n\n\n\n\nSend CompositionDefinition UID\non cost estimation endpoint\n(notebook)
+Template ---> "finops-database-handler" :  "\n\n\n\n\n\nSend\nCompositionDefinition\nUID on cost\nestimation endpoint\n(notebook)"
 Template -> CompositionDefinition
 N1 -> CompositionDefinition
+
+"finops-webhook-template" <-- CompositionDefinition : "CREATE\nUPDATE"
+"finops-webhook-template" --> CompositionDefinition : "Patch\nOptimization"
+"finops-webhook-template" <-> OPA
 
 object "RestConfig" {
   <service provider openapi schema>
@@ -60,7 +79,7 @@ component RDC
 
 "RestConfig" --> "Kubernetes Operator\nGenerator (KOG)"
 "Kubernetes Operator\nGenerator (KOG)" -> RDC
-"Kubernetes Operator\nGenerator (KOG)" --> "DataPresentationProvider\n(CRD)" : Create
+"DataPresentationProvider\n(CRD)" <- "Kubernetes Operator\nGenerator (KOG)" : Create
 
 
 package "Focus Data Presentation Composition" {
@@ -76,11 +95,11 @@ package "Focus Data Presentation Composition" {
 
 "FocusDataPresentation CDC" -[hidden]> "DataPresentationProvider\n(CRD)"
 
-"Kubernetes Operator\nGenerator (KOG)" -[hidden]> CrateDB
+"Kubernetes Operator\nGenerator (KOG)" -[hidden]> "finops-database-handler"
 
 "DataPresentationProvider\n(CRD)" .> DataPresentationProvider : "\tCR"
 "FocusDataPresentation CDC" <--> DataPresentationProvider
 "FocusDataPresentation CDC" -> FocusConfig : vendor-specific\npricing information
-"finops-database-handler" <--- FocusConfig : exporter/scraper flow\nto store FOCUS\nrows with pricing\ninformation only
+"finops-database-handler" <-- FocusConfig : exporter/scraper flow\nto store FOCUS\nrows with pricing\ninformation only
 
 @enduml

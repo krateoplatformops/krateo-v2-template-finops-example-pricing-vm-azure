@@ -126,9 +126,14 @@ spec:
 EOF
 ```
 
-Finally, install the resources for the frontend: [customform.yaml](https://github.com/krateoplatformops/finops-example-pricing-vm-azure/blob/main/customform.yaml).
+Install the resources for the frontend: [customform.yaml](https://github.com/krateoplatformops/finops-example-pricing-vm-azure/blob/main/customform.yaml).
 ```sh
 kubectl apply -f customform.yaml
+```
+
+Install the [finops-moving-window-microservice](https://github.com/krateoplatformops/finops-moving-window-microservice) with Helm:
+```
+helm install -n opa-system finops-moving-window-microservice krateo/finops-moving-window-microservice
 ```
 
 # Cost and Usage Metrics
@@ -201,15 +206,38 @@ Now you can save and run the logic app. If you did everything right, you should 
 
 ## Usage Metrics
 No additional setup is required to obtain usage metrics from Azure.
-The Helm chart already includes an `exporterscraperconfig.yaml` file among its templates, which contains the configuration for the exporters and scrapers related to usage metrics.
+The Helm chart already includes an `exporterscraperconfig.yaml` file among its templates, which contains the configuration for the exporters and scrapers related to usage metrics of the virtual machine created through the composition.
 
-The specified `timespan` is computed through the helper file `_dates.tpl`. It can be used as is, or customized to include additional ranges. The usage example can be found in the template of the ExporterScraperConfig.
+The specified `timespan` is computed through the helper file `_dates.tpl`. It can be used as is with the following ranges:
+- Day
+- Month
+- Year
+It can also be customized to include additional ranges. The file already accounts for leap years. The usage example can be found in the template of the ExporterScraperConfig:
+```yaml
+{{- $currentDate := now }} # Where now is, for example, the 15th of June 2025
+{{- $backupRange := list .Values.metricExporter.timespan $currentDate.Year $currentDate.Month $currentDate.Day | include "dates.dateRange" }} # .Values.metricExporter.timespan is "month"
+# backupRange value is 2024-06-15/2025-06-15
+```
 
 ## Optimizations
-The optimizations rely on Open Policy Agent. The instances of this composition definition will install it automatically through the [finops-webhook-template-chart](https://github.com/krateoplatformops/finops-webhook-template-chart), which is imported as a dependency. The template checks whether the webhook already exists, if it does not then it creates it, otherwise it does nothing.
+The optimizations rely on Open Policy Agent (OPA). The instances of this composition definition will install it automatically through the [finops-webhook-template-chart](https://github.com/krateoplatformops/finops-webhook-template-chart), which is imported as a dependency. The template checks whether the webhook already exists, if it does not then it creates it, otherwise it does nothing. If you have a custom installation of OPA that uses https, you will need to manually configure the certificates, otherwise it is done automatically.
+
+The fields:
+```yaml
+policyAdditionalValues:
+  optimizationServiceEndpointRef:
+    name: finops-moving-window-microservice-endpoint
+    namespace: opa-system
+```
+are used by the [finops-moving-window-policy](https://github.com/krateoplatformops/finops-moving-window-policy) in OPA and point to the endpoint of the [finops-moving-window-optimization-microservice]. The policy parses all the data from the cluster and serves the complete request to the microservice, which then queries the [finops-database-handler](https://github.com/krateoplatformops/finops-database-handler) for the timeseries data and provides the optimization to the policy. The policy mutates the composition through the [finops-webhook-template](https://github.com/krateoplatformops/finops-webhook-template) to add the optimization to the field `spec.optimization`, which is then displayed in the frontend.
 
 ## Krateo Composable FinOps
-To start the exporter/scraper for all costs and CPU usage of VMs, see the following [sample](/samples/exporterscrapersample.yaml). It also includes the configuration for the external-secrets operator, which handles retrieving bearer tokens from Azure. See the installation instructions here: [Getting started](https://external-secrets.io/latest/introduction/getting-started/).
+To start the exporter/scraper for all costs and CPU usage of VMs, see the following [sample](/samples/exporterscrapersample.yaml) sample. To handle the access tokens for Azure, we suggest the externl-secrets operator. The configuration is included in the sample. It handles retrieving bearer tokens from Azure automatically, every hour. See the installation instructions here: [Getting started](https://external-secrets.io/latest/introduction/getting-started/). Or use the following commands:
+```
+helm repo add external-secrets https://charts.external-secrets.io
+helm repo update
+helm install external-secrets external-secrets/external-secrets -n externalsecrets-system --create-namespace
+```
 
 Finally, enable the cluster-wide external secrets for the krateo-system namespace with:
 ```

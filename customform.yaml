@@ -89,7 +89,7 @@ spec:
         resource: finopsexamplepricingvmazures
         payloadToOverride:
         - name: metadata.name
-          value: ${ resourceGroupName }
+          value: ${ name }
         - name: metadata.namespace
           value: ${ "azure-pricing-system" }
   app:
