@@ -33,13 +33,13 @@ webhook:
   # The webhook lookup will look for the field "caBundle"
   certsSecretRef:
     name: opa-kube-mgmt-cert
-    namespace: opa-system
+    namespace: krateo-system
   # Otherwise it will use the CA Bundle specified in CA
   CA: ""
 
   service:
     name: opa-kube-mgmt
-    namespace: opa-system
+    namespace: krateo-system
     port: 8181
 
 global:
@@ -80,4 +80,4 @@ metricExporter:
 policyAdditionalValues:
   optimizationServiceEndpointRef:
     name: finops-moving-window-microservice-endpoint
-    namespace: opa-system
+    namespace: azure-pricing-system

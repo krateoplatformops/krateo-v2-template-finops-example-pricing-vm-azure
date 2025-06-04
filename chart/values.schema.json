@@ -104,7 +104,7 @@
               "type": "string"
             },
             "namespace": {
-              "default": "opa-system",
+              "default": "azure-pricing-system",
               "required": [],
               "title": "namespace",
               "type": "string"
@@ -188,7 +188,7 @@
               "type": "string"
             },
             "namespace": {
-              "default": "opa-system",
+              "default": "krateo-system",
               "required": [],
               "title": "namespace",
               "type": "string"
@@ -248,7 +248,7 @@
               "type": "string"
             },
             "namespace": {
-              "default": "opa-system",
+              "default": "krateo-system",
               "required": [],
               "title": "namespace",
               "type": "string"
