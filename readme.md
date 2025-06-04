@@ -122,7 +122,7 @@ spec:
   chart:
     repo: finops-example-pricing-vm-azure
     url: https://charts.krateo.io
-    version: "0.1.3"
+    version: "0.1.4"
 EOF
 ```
 
@@ -133,7 +133,7 @@ kubectl apply -f customform.yaml
 
 Install the [finops-moving-window-microservice](https://github.com/krateoplatformops/finops-moving-window-microservice) with Helm:
 ```
-helm install -n opa-system finops-moving-window-microservice krateo/finops-moving-window-microservice
+helm install -n azure-pricing-system finops-moving-window-microservice krateo/finops-moving-window-microservice
 ```
 
 # Cost and Usage Metrics
@@ -212,6 +212,7 @@ The specified `timespan` is computed through the helper file `_dates.tpl`. It ca
 - Day
 - Month
 - Year
+
 It can also be customized to include additional ranges. The file already accounts for leap years. The usage example can be found in the template of the ExporterScraperConfig:
 ```yaml
 {{- $currentDate := now }} # Where now is, for example, the 15th of June 2025
@@ -227,12 +228,12 @@ The fields:
 policyAdditionalValues:
   optimizationServiceEndpointRef:
     name: finops-moving-window-microservice-endpoint
-    namespace: opa-system
+    namespace: azure-pricing-system
 ```
-are used by the [finops-moving-window-policy](https://github.com/krateoplatformops/finops-moving-window-policy) in OPA and point to the endpoint of the [finops-moving-window-optimization-microservice]. The policy parses all the data from the cluster and serves the complete request to the microservice, which then queries the [finops-database-handler](https://github.com/krateoplatformops/finops-database-handler) for the timeseries data and provides the optimization to the policy. The policy mutates the composition through the [finops-webhook-template](https://github.com/krateoplatformops/finops-webhook-template) to add the optimization to the field `spec.optimization`, which is then displayed in the frontend.
+are used by the [finops-moving-window-policy](https://github.com/krateoplatformops/finops-moving-window-policy) in OPA and point to the endpoint of the [finops-moving-window-optimization-microservice](https://github.com/krateoplatformops/finops-moving-window-microservice). The policy parses all the data from the cluster and serves the complete request to the microservice, which then queries the [finops-database-handler](https://github.com/krateoplatformops/finops-database-handler) for the timeseries data and provides the optimization to the policy. The policy mutates the composition through the [finops-webhook-template](https://github.com/krateoplatformops/finops-webhook-template) to add the optimization to the field `spec.optimization`, which is then displayed in the frontend.
 
 ## Krateo Composable FinOps
-To start the exporter/scraper for all costs and CPU usage of VMs, see the following [sample](/samples/exporterscrapersample.yaml) sample. To handle the access tokens for Azure, we suggest the externl-secrets operator. The configuration is included in the sample. It handles retrieving bearer tokens from Azure automatically, every hour. See the installation instructions here: [Getting started](https://external-secrets.io/latest/introduction/getting-started/). Or use the following commands:
+To start the exporter/scraper for all costs, see the following [sample](/samples/exporterscrapersample.yaml). To handle the access tokens for Azure, we suggest the [external-secrets](https://github.com/external-secrets/external-secrets) operator. The configuration is included in the sample. It handles retrieving bearer tokens from Azure automatically, every hour. See the installation instructions here: [Getting started](https://external-secrets.io/latest/introduction/getting-started/). Or use the following commands:
 ```
 helm repo add external-secrets https://charts.external-secrets.io
 helm repo update
@@ -243,6 +244,8 @@ Finally, enable the cluster-wide external secrets for the krateo-system namespac
 ```
 kubectl label namespace krateo-system azure-secrets=enabled
 ```
+
+Now apply the [sample](/samples/exporterscrapersample.yaml) after configuring your subscription id, client id and client secret.
 
 # Output Sample
 The FinOps tab will look like this when populated with metrics:
