@@ -83,7 +83,7 @@ metricExporter:
 # Values for the Moving Window microservice endpoint secret
 policyAdditionalValues:
   # See here for the format: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-syntax
-  cronJobSchedule: "0 * * * *"
+  cronJobSchedule: "0 0 * * *" # default: daily
   optimizationServiceEndpointRef:
     name: finops-moving-window-microservice-endpoint
     namespace: azure-pricing-system
