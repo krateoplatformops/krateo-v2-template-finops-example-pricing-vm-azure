@@ -18,6 +18,6 @@ spec:
               - {{ .Values.global.compositionResource }}
               - -n {{- .Values.global.compositionNamespace -}}
               - --overwrite
-              - {{ .Values.global.compositionName }}
+              - "{{- .Values.global.compositionName -}}"
               - optimization={{ now }}
           restartPolicy: OnFailure
