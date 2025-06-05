@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ include "example-pricing-vm-azure.fullname" . }}
 spec:
-  schedule: {{ Values.policyAdditionalValues.cronJobSchedule }}
+  schedule: {{ .Values.policyAdditionalValues.cronJobSchedule }}
   jobTemplate:
     spec:
       template:
