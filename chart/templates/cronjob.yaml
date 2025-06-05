@@ -58,5 +58,5 @@ roleRef:
   name: {{ include "example-pricing-vm-azure.fullname" . }}
 subjects:
 - kind: ServiceAccount
-  name: {{ include "example-pricing-vm-azure.serviceAccountName" . }}
+  name: {{ include "example-pricing-vm-azure.fullname" . }}
   namespace: '{{ .Release.Namespace }}'
