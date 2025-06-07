@@ -32,6 +32,22 @@ The following figure shows an example of the pricing information retrieved from 
 <sub>Note: The `1 GB/Month` expenditure has been added through the API as an example of multiple values and will not appear when installing the composition.</sub>
 
 ## Installation
+You need a Kubernetes cluster with version greater or equal to 1.31 (OpenShift 4.18) for the pricing example to work. If you have Kubernetes version 1.30 (OpenShift 4.17) you need to enable the feature gate `CustomResourceFieldSelectors` (see [here](https://github.com/kubernetes/kubernetes/pull/122717)). On OpenShift 4.17 you can enable it with:
+```yaml
+apiVersion: config.openshift.io/v1
+kind: FeatureGate
+metadata:
+  name: cluster
+spec:
+  featureSet: CustomNoUpgrade
+  customNoUpgrade:
+    enabled:
+      - CustomResourceFieldSelectors
+```
+Note that this will disable automatic updates between minor versions in OpenShift.
+> [!NOTE]
+> If you did not have the feature gate enabled when you installed the finops-operator-focus, you need to manually re-apply the CRD, as the `selectableFields` [field](https://github.com/krateoplatformops/finops-operator-focus-chart/blob/c6ee9f0b3d361100e5b5893c83e9231cbae5077b/chart/crds/finops.krateo.io_focusconfigs.yaml#L18) in the CRD will get pruned without the feature gate (applies to both standard Kubernetes and OpenShift).
+
 Install the cert-manager for the Azure operator:
 ```sh
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.3/cert-manager.yaml
@@ -46,6 +62,17 @@ helm upgrade --install aso2 aso2/azure-service-operator \
     --namespace=azureserviceoperator-system \
     --set crdPattern='resources.azure.com/*;compute.azure.com/*;network.azure.com/*'
 ```
+On OpenShift use:
+```sh
+helm upgrade --install aso2 aso2/azure-service-operator \
+    --create-namespace \
+    --namespace=azureserviceoperator-system \
+    --set crdPattern='resources.azure.com/*;compute.azure.com/*;network.azure.com/*' \
+    --set securityContext.runAsUser=null \
+    --set securityContext.runAsGroup=null \
+    --set networkPolicies.enable=false
+```
+It removes the user and group since Openshift runs with randomized user and group uids. Additionally, it disables network policies, since they are not supported by default on Openshift.
 
 Create the secret with the credentials for the Azure operator
 ```sh
