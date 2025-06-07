@@ -72,7 +72,7 @@ helm upgrade --install aso2 aso2/azure-service-operator \
     --set securityContext.runAsGroup=null \
     --set networkPolicies.enable=false
 ```
-It removes the user and group since Openshift runs with randomized user and group uids. Additionally, it disables network policies, since they are not supported by default on Openshift.
+It removes the user and group since Openshift runs with randomized user and group uids. Additionally, it disables network policies, since they are not supported by default on Openshift (see [issue#3259 of ASO](https://github.com/Azure/azure-service-operator/issues/3259)).
 
 Create the secret with the credentials for the Azure operator
 ```sh
