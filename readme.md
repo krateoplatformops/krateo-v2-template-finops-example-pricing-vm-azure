@@ -46,7 +46,7 @@ spec:
 ```
 Note that this will disable automatic updates between minor versions in OpenShift.
 > [!NOTE]
-> If you did not have the feature gate enabled when you installed the finops-operator-focus, you need to manually re-apply the CRD, as the `selectableFields` [field](https://github.com/krateoplatformops/finops-operator-focus-chart/blob/c6ee9f0b3d361100e5b5893c83e9231cbae5077b/chart/crds/finops.krateo.io_focusconfigs.yaml#L18) in the CRD will get pruned without the feature gate (applies to both standard Kubernetes and OpenShift).
+> If you did not have the feature gate enabled when you installed the finops-operator-focus, you need to manually re-apply the CRD, as the `selectableFields` [field](https://github.com/krateoplatformops/finops-operator-focus-chart/blob/c6ee9f0b3d361100e5b5893c83e9231cbae5077b/chart/crds/finops.krateo.io_focusconfigs.yaml#L18) in the CRD will get pruned without the feature gate (applies to both standard Kubernetes and OpenShift). To install the Feature Gate on OpenShift see [fg.yaml](samples/fg.yaml)
 
 Install the cert-manager for the Azure operator:
 ```sh
