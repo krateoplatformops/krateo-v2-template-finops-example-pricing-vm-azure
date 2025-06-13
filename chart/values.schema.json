@@ -177,6 +177,13 @@
       "additionalProperties": true,
       "description": "Webhook configuration, the certificare and the service should match the OPA install\nDefault values match the krateo-installer",
       "properties": {
+        "enabled": {
+          "default": "false",
+          "description": "Enable the webhook",
+          "required": [],
+          "title": "enabled",
+          "type": "boolean"
+        },
         "CA": {
           "default": "",
           "description": "Otherwise it will use the CA Bundle specified in CA",
