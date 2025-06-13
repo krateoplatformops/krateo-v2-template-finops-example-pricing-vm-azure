@@ -178,7 +178,7 @@
       "description": "Webhook configuration, the certificare and the service should match the OPA install\nDefault values match the krateo-installer",
       "properties": {
         "enabled": {
-          "default": "false",
+          "default": false,
           "description": "Enable the webhook",
           "required": [],
           "title": "enabled",
