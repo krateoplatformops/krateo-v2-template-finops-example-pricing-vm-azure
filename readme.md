@@ -8,6 +8,8 @@ It achieves so through the following components:
 
 Additionally, it can be configured to utilize the new FinOps page in the composition portal basic. This page can be configured to show a breakdown of the costs of the composition and the usage metrics.
 
+For `Krateo 2.4.3`, install the composition with version `0.1.4`. For `Krateo 2.5.0`, install the composition with version greater than `0.1.5`. Version 0.1.4 **omits** Open Policy Agent and its policies, thus removing the optimization components.
+
 ## Summary
 
 1. [Overview](#overview)
@@ -30,6 +32,14 @@ The following figure shows an example of the pricing information retrieved from 
 </p>
 
 <sub>Note: The `1 GB/Month` expenditure has been added through the API as an example of multiple values and will not appear when installing the composition.</sub>
+
+The FinOps tab will look like this when populated with metrics:
+<p align="center">
+<img src="/_diagrams/metrics_frontend.png" width="800">
+</p>
+
+> [!NOTE]
+> Do not put "_" in the virtual machine or resource group names, because it is used by Azure to differentiate between name and resource name for dependencies of the virtual machine (e.g., disks).
 
 ## Installation
 You need a Kubernetes cluster with version greater or equal to 1.31 (OpenShift 4.18) for the pricing example to work. If you have Kubernetes version 1.30 (OpenShift 4.17) you need to enable the feature gate `CustomResourceFieldSelectors` (see [here](https://github.com/kubernetes/kubernetes/pull/122717)). On OpenShift 4.17 you can enable it with:
@@ -158,7 +168,7 @@ Install the resources for the frontend: [customform.yaml](https://github.com/kra
 kubectl apply -f customform.yaml
 ```
 
-Install the [finops-moving-window-microservice](https://github.com/krateoplatformops/finops-moving-window-microservice) with Helm:
+If you have Krateo 2.5.0: install the [finops-moving-window-microservice](https://github.com/krateoplatformops/finops-moving-window-microservice) with Helm:
 ```
 helm install -n azure-pricing-system finops-moving-window-microservice krateo/finops-moving-window-microservice
 ```
@@ -247,7 +257,7 @@ It can also be customized to include additional ranges. The file already account
 # backupRange value is 2024-06-15/2025-06-15
 ```
 
-## Optimizations
+## Optimizations (Krateo 2.5.0)
 The optimizations rely on Open Policy Agent (OPA). The instances of this composition definition will install it automatically through the [finops-webhook-template-chart](https://github.com/krateoplatformops/finops-webhook-template-chart), which is imported as a dependency. The template checks whether the webhook already exists, if it does not then it creates it, otherwise it does nothing. If you have a custom installation of OPA that uses https, you will need to manually configure the certificates, otherwise it is done automatically.
 
 The fields:
@@ -276,9 +286,6 @@ kubectl label namespace krateo-system azure-secrets=enabled
 
 Now apply the [sample](/samples/exporterscrapersample.yaml) after configuring your subscription id, client id and client secret.
 
-# Output Sample
-The FinOps tab will look like this when populated with metrics:
-
-<p align="center">
-<img src="/_diagrams/metrics_frontend.png" width="800">
-</p>
+# Composition Creation and Krateo Namespace
+> [!NOTE] 
+> This FinOps composition example only works when Krateo is installed in `krateo-system`. If Krateo is installed in a different namespace, you **must** configure the variable [krateoNamespace](chart/values.yaml#L48) to the correct namespace when instantiating a composition. 
