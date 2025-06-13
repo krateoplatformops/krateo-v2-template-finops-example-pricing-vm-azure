@@ -11,6 +11,7 @@ optimization: "The resource utilization and the proposed optimization for the gi
 # Webhook configuration, the certificare and the service should match the OPA install
 # Default values match the krateo-installer
 webhook:
+  enabled: false
   fullnameOverride: mutating-webhook-finopsexamplepricingvmazures
   # To set annotations on all admissionController resources (Secret/Certificate/Issuer/AdmissionController)
   # annotations:

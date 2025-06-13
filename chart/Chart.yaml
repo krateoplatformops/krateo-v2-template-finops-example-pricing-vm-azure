@@ -30,6 +30,7 @@ dependencies:
   repository: "https://charts.krateo.io"
   alias: portal
 - name: finops-webhook-template
+  condition: webhook.enabled
   version: "0.1.0"
   repository: "https://charts.krateo.io"
   alias: webhook
