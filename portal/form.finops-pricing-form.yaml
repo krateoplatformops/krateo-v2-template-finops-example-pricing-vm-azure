@@ -1,0 +1,23 @@
+apiVersion: widgets.templates.krateo.io/v1beta1
+kind: Form
+metadata:
+  name: finops-form
+spec:
+  actions: {}
+  apiRef:
+    name: 
+    namespace: krateo-system
+  resourcesRefs:
+  - apiVersion: composition.krateo.io/v2-0-0
+    id: resource-ref-1
+    name: new-app
+    namespace: azure-pricing-system
+    resource: finopsexamplepricingvmazures
+    verb: POST
+  widgetData:
+    fieldDescription: inline
+    schema: {}
+    submitActionId: finops-submit-action
+  widgetDataTemplate:
+  - expression: ${ .getSchemaNotOrdered.data["values.schema.json"] }
+    forPath: stringSchema

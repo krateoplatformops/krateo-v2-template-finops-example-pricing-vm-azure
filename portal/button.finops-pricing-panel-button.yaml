@@ -1,0 +1,24 @@
+kind: Button
+apiVersion: widgets.templates.krateo.io/v1beta1
+metadata:
+  name: pricing-panel-button
+  namespace: azure-pricing-system
+spec:
+  widgetData:
+    label: Pricing
+    icon: fa-rocket
+    size: large
+    type: primary
+    clickActionId: open-pricing-drawer
+  actions:
+    openDrawer:
+      - id: open-pricing-drawer
+        resourceRefId: pricing-information
+        type: openDrawer
+  resourcesRefs:
+    - id: pricing-information
+      apiVersion: widgets.templates.krateo.io/v1beta1
+      resource: paragraph
+      name: finops-pricing-panel-paragraph
+      namespace: azure-pricing-system
+      verb: GET
