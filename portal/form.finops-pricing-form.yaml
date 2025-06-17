@@ -8,7 +8,7 @@ spec:
     name: 
     namespace: krateo-system
   resourcesRefs:
-  - apiVersion: composition.krateo.io/v2-0-0
+  - apiVersion: composition.krateo.io/v0-2-0
     id: resource-ref-1
     name: new-app
     namespace: azure-pricing-system
