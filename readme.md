@@ -8,7 +8,7 @@ It achieves so through the following components:
 
 Additionally, it can be configured to utilize the new FinOps page in the composition portal basic. This page can be configured to show a breakdown of the costs of the composition and the usage metrics.
 
-For `Krateo 2.4.3`, install the composition with version `0.1.4`. For `Krateo 2.5.0`, install the composition with version greater than `0.1.5`. Version 0.1.4 **omits** Open Policy Agent and its policies, thus removing the optimization components.
+For `Krateo 2.4.3`, install the composition with version `0.1.4`. For `Krateo 2.5.0`, install the composition with version greater than `0.2.0`. Version 0.1.4 **omits** Open Policy Agent and its policies, thus removing the optimization components.
 
 ## Summary
 
@@ -159,14 +159,25 @@ spec:
   chart:
     repo: finops-example-pricing-vm-azure
     url: https://charts.krateo.io
-    version: "0.1.4"
+    version: "0.2.0"
 EOF
 ```
 
-Install the resources for the frontend: [customform.yaml](https://github.com/krateoplatformops/finops-example-pricing-vm-azure/blob/main/customform.yaml).
+Install the resources for the frontend: 
+<details>
+  <summary>Krateo <= 2.4.3</summary>
+[customform.yaml](./customform.yaml).
 ```sh
 kubectl apply -f customform.yaml
 ```
+</details>
+<details>
+  <summary>Krateo >= 2.5.0</summary>
+  [portal](./portal/)
+```sh
+kubectl apply -f ./portal
+```
+</details>
 
 If you have Krateo 2.5.0: install the [finops-moving-window-microservice](https://github.com/krateoplatformops/finops-moving-window-microservice) with Helm:
 ```
