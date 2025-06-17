@@ -2,7 +2,7 @@ kind: Button
 apiVersion: widgets.templates.krateo.io/v1beta1
 metadata:
   name: finops-template-panel-button
-  namespace: finops-system
+  namespace: azure-pricing-system
 spec:
   widgetData:
     icon: fa-trash

@@ -1,7 +1,8 @@
 apiVersion: widgets.templates.krateo.io/v1beta1
 kind: Form
 metadata:
-  name: finops-form
+  name: finops-template-panel-form
+  namespace: azure-pricing-system
 spec:
   actions:
     rest:
@@ -16,7 +17,7 @@ spec:
       type: rest
   apiRef:
     name: finops-schema
-    namespace: krateo-system
+    namespace: azure-pricing-system
   resourcesRefs:
   - apiVersion: composition.krateo.io/v0-2-0
     id: resource-ref-1

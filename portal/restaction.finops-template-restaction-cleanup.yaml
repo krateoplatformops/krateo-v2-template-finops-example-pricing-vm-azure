@@ -14,3 +14,6 @@ spec:
   - name: deletePanelButton
     path: "/apis/widgets.templates.krateo.io/v1beta1/namespaces/azure-pricing-system/buttons/finops-template-panel-button"
     verb: DELETE
+  - name: deleteCompositionDefinition
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/azure-pricing-system/compositiondefinitions/finops-example-pricing-vm-azure"
+    verb: DELETE

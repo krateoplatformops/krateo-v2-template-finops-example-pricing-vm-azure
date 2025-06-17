@@ -1,12 +1,12 @@
 kind: Button
 apiVersion: widgets.templates.krateo.io/v1beta1
 metadata:
-  name: pricing-panel-button
+  name: finops-pricing-panel-button
   namespace: azure-pricing-system
 spec:
   widgetData:
     label: Pricing
-    icon: fa-rocket
+    icon: fa-hand-holding-dollar
     size: large
     type: primary
     clickActionId: open-pricing-drawer
