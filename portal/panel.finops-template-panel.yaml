@@ -1,0 +1,51 @@
+kind: Panel
+apiVersion: widgets.templates.krateo.io/v1beta1
+metadata:
+  name: finops-template-panel
+  namespace: azure-pricing-system
+  labels:
+    krateo.io/portal-page: templates
+spec:
+  widgetData:
+    clickActionId: template-click-action
+    footer:
+      items:
+        - resourceRefId: template-panel-button
+        - resourceRefId: pricing-panel-button
+      tag: azure-pricing-system,0.2.0
+    icon:
+      name: fa-hand-holding-dollar
+      color: green
+    items:
+      - resourceRefId: template-panel-paragraph
+    title: "FinOps Example Pricing VM Azure"
+  actions:
+    openDrawer:
+      - id: template-click-action
+        resourceRefId: template-form
+        type: openDrawer
+  resourcesRefs:
+    - id: template-panel-paragraph
+      apiVersion: widgets.templates.krateo.io/v1beta1
+      name: finops-template-panel-paragraph
+      namespace: azure-pricing-system
+      resource: paragraphs
+      verb: GET
+    - id: template-panel-button
+      apiVersion: widgets.templates.krateo.io/v1beta1
+      name: finops-template-panel-button
+      namespace: azure-pricing-system
+      resource: buttons
+      verb: GET
+    - id: finops-panel-button
+      apiVersion: widgets.templates.krateo.io/v1beta1
+      name: finops-pricing-panel-button
+      namespace: azure-pricing-system
+      resource: buttons
+      verb: GET
+    - id: template-form
+      apiVersion: widgets.templates.krateo.io/v1beta1
+      name: finops-template-panel-form
+      namespace: azure-pricing-system
+      resource: forms
+      verb: GET

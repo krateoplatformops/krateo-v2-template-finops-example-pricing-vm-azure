@@ -3,6 +3,8 @@ kind: NetworkInterface
 metadata:
   name: {{ include "example-pricing-vm-azure.fullname" . }}
 spec:
+  tags:
+    compositionId: {{ .Values.global.compositionId }}
   location: {{ .Values.armRegionName }}
   owner:
     name: {{ .Values.resourceGroupName }}

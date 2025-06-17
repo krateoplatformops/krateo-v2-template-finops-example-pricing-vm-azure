@@ -8,4 +8,6 @@ metadata:
     helm.sh/resource-policy: keep
 spec:
   location: {{ .Values.armRegionName }}
+  tags:
+    compositionId: {{ .Values.global.compositionId }}
 {{ end }}
