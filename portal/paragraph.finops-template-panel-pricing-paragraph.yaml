@@ -1,7 +1,7 @@
 kind: Paragraph
 apiVersion: widgets.templates.krateo.io/v1beta1
 metadata:
-  name: finops-template-panel-paragraph
+  name: finops-pricing-panel-paragraph
   namespace: azure-pricing-system
 spec:
   widgetData:
@@ -9,6 +9,6 @@ spec:
   widgetDataTemplate:
   - expression: ${ .status | "Pricing information:\n \(to_entries | map(" up to \(.value)$ per \(.key); ") | join("\n "))" }
     forPath: text
-  api:
+  apiRef:
     name: get-pricing-information-frontend
     namespace: azure-pricing-system

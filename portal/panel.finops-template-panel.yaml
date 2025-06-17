@@ -12,7 +12,7 @@ spec:
       items:
         - resourceRefId: template-panel-button
         - resourceRefId: pricing-panel-button
-      tag: azure-pricing-system,0.2.0
+#      tag: azure-pricing-system,0.2.0
     icon:
       name: fa-hand-holding-dollar
       color: green
@@ -37,7 +37,7 @@ spec:
       namespace: azure-pricing-system
       resource: buttons
       verb: GET
-    - id: finops-panel-button
+    - id: pricing-panel-button
       apiVersion: widgets.templates.krateo.io/v1beta1
       name: finops-pricing-panel-button
       namespace: azure-pricing-system

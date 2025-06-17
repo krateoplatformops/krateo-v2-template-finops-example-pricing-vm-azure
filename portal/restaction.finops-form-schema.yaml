@@ -2,6 +2,7 @@ apiVersion: templates.krateo.io/v1
 kind: RESTAction
 metadata:
   name: finops-schema
+  namespace: azure-pricing-system
 spec:
   api:
   - headers:
