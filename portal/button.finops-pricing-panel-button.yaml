@@ -5,10 +5,9 @@ metadata:
   namespace: azure-pricing-system
 spec:
   widgetData:
-    label: Pricing
-    icon: fa-hand-holding-dollar
-    size: large
-    type: primary
+    icon: fa-solid fa-dollar-sign
+    type: default
+    shape: circle
     clickActionId: open-pricing-drawer
   actions:
     openDrawer:
@@ -18,7 +17,7 @@ spec:
   resourcesRefs:
     - id: pricing-information
       apiVersion: widgets.templates.krateo.io/v1beta1
-      resource: paragraph
-      name: finops-pricing-panel-paragraph
+      resource: panel
+      name: finops-pricing-panel
       namespace: azure-pricing-system
       verb: GET

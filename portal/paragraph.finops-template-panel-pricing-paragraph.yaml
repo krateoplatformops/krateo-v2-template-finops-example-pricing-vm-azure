@@ -7,7 +7,7 @@ spec:
   widgetData:
    text: "Pricing Information missing"
   widgetDataTemplate:
-  - expression: ${ .status | "Pricing information:\n \(to_entries | map(" up to \(.value)$ per \(.key); ") | join("\n "))" }
+  - expression: ${ .getPricingInformation | "\(to_entries | map(" up to \(.value)$ per \(.key); ") | join("\n "))" }
     forPath: text
   apiRef:
     name: get-pricing-information-frontend
