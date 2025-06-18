@@ -8,6 +8,36 @@
       "title": "armRegionName",
       "type": "string"
     },
+    "resourceGroupName": {
+      "default": "aso-sample-rg",
+      "required": [],
+      "title": "resourceGroupName",
+      "type": "string"
+    },
+    "vmAdminUsername": {
+      "default": "userAdmin",
+      "required": [],
+      "title": "vmAdminUsername",
+      "type": "string"
+    },
+    "vmComputerName": {
+      "default": "poppy",
+      "required": [],
+      "title": "vmComputerName",
+      "type": "string"
+    },
+    "vmPassword": {
+      "default": "Password123%",
+      "required": [],
+      "title": "vmPassword",
+      "type": "string"
+    },
+    "vmSize": {
+      "default": "Standard_B2s",
+      "required": [],
+      "title": "vmSize",
+      "type": "string"
+    },
     "global": {
       "additionalProperties": true,
       "properties": {
@@ -143,36 +173,6 @@
       "title": "optimization",
       "type": "string"
     },
-    "resourceGroupName": {
-      "default": "aso-sample-rg",
-      "required": [],
-      "title": "resourceGroupName",
-      "type": "string"
-    },
-    "vmAdminUsername": {
-      "default": "userAdmin",
-      "required": [],
-      "title": "vmAdminUsername",
-      "type": "string"
-    },
-    "vmComputerName": {
-      "default": "poppy",
-      "required": [],
-      "title": "vmComputerName",
-      "type": "string"
-    },
-    "vmPassword": {
-      "default": "Password123%",
-      "required": [],
-      "title": "vmPassword",
-      "type": "string"
-    },
-    "vmSize": {
-      "default": "Standard_B2s",
-      "required": [],
-      "title": "vmSize",
-      "type": "string"
-    },
     "webhook": {
       "additionalProperties": true,
       "description": "Webhook configuration, the certificare and the service should match the OPA install\nDefault values match the krateo-installer",
@@ -298,7 +298,6 @@
       },
       "required": [
         "fullnameOverride",
-        "namespaceSelector",
         "sideEffect",
         "useHttps",
         "generatedCerts",

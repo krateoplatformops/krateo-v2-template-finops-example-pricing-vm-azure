@@ -13,6 +13,7 @@ spec:
         value: ${ name }
       - name: metadata.namespace
         value: ${ "azure-pricing-system" }
+      payloadKey: ""
       resourceRefId: resource-ref-1
       type: rest
   apiRef:
