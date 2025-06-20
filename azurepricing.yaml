@@ -5,7 +5,7 @@ metadata:
   namespace: azure-pricing-system
 spec:
   annotationKey: krateo-finops-focus-resource
-  filter: serviceName eq 'Virtual Machines' and armSkuName eq 'Standard_B2s' and armRegionName eq 'westus3' and type eq 'Consumption'
+  filter: serviceName eq 'Virtual Machines' and armSkuName eq 'Standard_B2s' and type eq 'Consumption'
   operatorFocusNamespace: krateo-system
   scraperConfig:
     tableName: pricing_table

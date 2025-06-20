@@ -7,13 +7,16 @@ spec:
   actions:
     rest:
     - id: finops-submit-action
-      onSuccessNavigateTo: /compositions/${metadata.namespace}/${metadata.name}
+      onEventNavigateTo:
+          eventReason: "CompositionCreated"
+          url: "/compositions/${metadata.namespace}/${metadata.name}"
+          timeout: 50
       payloadToOverride:
       - name: metadata.name
         value: ${ name }
       - name: metadata.namespace
         value: ${ "azure-pricing-system" }
-      payloadKey: ""
+      payloadKey: spec
       resourceRefId: resource-ref-1
       type: rest
   apiRef:
