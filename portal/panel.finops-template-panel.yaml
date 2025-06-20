@@ -6,13 +6,18 @@ metadata:
   labels:
     krateo.io/portal-page: templates
 spec:
+  apiRef:
+    name: finopsexamplepricingvmazures-compositiondefinition
+    namespace: azure-pricing-system
   widgetData:
     clickActionId: template-click-action
     footer:
       items:
-        - resourceRefId: template-panel-button
         - resourceRefId: pricing-panel-button
-#      tag: azure-pricing-system,0.2.0
+        - resourceRefId: template-panel-button
+      tags: 
+        - azure-pricing-system
+        - "0.2.0"
     icon:
       name: fa-hand-holding-dollar
       color: green
@@ -24,6 +29,14 @@ spec:
       - id: template-click-action
         resourceRefId: template-form
         type: openDrawer
+        size: large
+  widgetDataTemplate:
+    - forPath: icon.color
+      expression: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
+    - forPath: headerLeft
+      expression: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "Ready:False" elif .status == "True" then "Ready:True" end }
+    - forPath: headerRight
+      expression: ${ .getCompositionDefinition.metadata.creationTimestamp }
   resourcesRefs:
     - id: template-panel-paragraph
       apiVersion: widgets.templates.krateo.io/v1beta1

@@ -14,6 +14,12 @@
       "title": "resourceGroupName",
       "type": "string"
     },
+    "name": {
+      "default": "aso-sample",
+      "required": [],
+      "title": "name",
+      "type": "string"
+    },
     "vmAdminUsername": {
       "default": "userAdmin",
       "required": [],
@@ -160,13 +166,6 @@
       "title": "policyAdditionalValues",
       "type": "object"
     },
-    "name": {
-      "default": "aso-sample",
-      "required": [],
-      "title": "name",
-      "type": "string"
-    },
-    
     "optimization": {
       "default": "The resource utilization and the proposed optimization for the given resource.",
       "required": [],
