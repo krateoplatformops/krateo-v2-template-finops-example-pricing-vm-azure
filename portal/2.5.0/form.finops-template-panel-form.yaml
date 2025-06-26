@@ -4,21 +4,25 @@ metadata:
   name: finops-template-panel-form
   namespace: azure-pricing-system
 spec:
-  actions:
-    rest:
-    - id: finops-submit-action
-      onEventNavigateTo:
-          eventReason: "CompositionCreated"
-          url: "/compositions/${metadata.namespace}/${metadata.name}"
-          timeout: 50
-      payloadToOverride:
-      - name: metadata.name
-        value: ${ name }
-      - name: metadata.namespace
-        value: ${ "azure-pricing-system" }
-      payloadKey: spec
-      resourceRefId: resource-ref-1
-      type: rest
+  widgetData:
+    fieldDescription: inline
+    schema: {}
+    submitActionId: finops-submit-action
+    actions:
+      rest:
+      - id: finops-submit-action
+        onEventNavigateTo:
+            eventReason: "CompositionCreated"
+            url: "/compositions/${metadata.namespace}/${metadata.name}"
+            timeout: 50
+        payloadToOverride:
+        - name: metadata.name
+          value: ${ name }
+        - name: metadata.namespace
+          value: ${ "azure-pricing-system" }
+        payloadKey: spec
+        resourceRefId: resource-ref-1
+        type: rest
   apiRef:
     name: finops-schema
     namespace: azure-pricing-system
@@ -29,10 +33,6 @@ spec:
     namespace: azure-pricing-system
     resource: finopsexamplepricingvmazures
     verb: POST
-  widgetData:
-    fieldDescription: inline
-    schema: {}
-    submitActionId: finops-submit-action
   widgetDataTemplate:
   - expression: ${ .getSchemaNotOrdered.data["values.schema.json"] }
     forPath: stringSchema
