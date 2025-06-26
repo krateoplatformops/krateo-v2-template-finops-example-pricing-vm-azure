@@ -9,11 +9,11 @@ spec:
     type: default
     shape: circle
     clickActionId: open-pricing-drawer
-  actions:
-    openDrawer:
-      - id: open-pricing-drawer
-        resourceRefId: pricing-information
-        type: openDrawer
+    actions:
+      openDrawer:
+        - id: open-pricing-drawer
+          resourceRefId: pricing-information
+          type: openDrawer
   resourcesRefs:
     - id: pricing-information
       apiVersion: widgets.templates.krateo.io/v1beta1

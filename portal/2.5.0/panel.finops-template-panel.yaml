@@ -12,24 +12,23 @@ spec:
   widgetData:
     clickActionId: template-click-action
     footer:
-      items:
-        - resourceRefId: pricing-panel-button
-        - resourceRefId: template-panel-button
-      tags: 
-        - azure-pricing-system
-        - "0.2.0"
+      - resourceRefId: pricing-panel-button
+      - resourceRefId: template-panel-button
+    tags: 
+      - azure-pricing-system
+      - "0.2.0"
     icon:
       name: fa-hand-holding-dollar
       color: green
     items:
       - resourceRefId: template-panel-paragraph
     title: "FinOps Example Pricing VM Azure"
-  actions:
-    openDrawer:
-      - id: template-click-action
-        resourceRefId: template-form
-        type: openDrawer
-        size: large
+    actions:
+      openDrawer:
+        - id: template-click-action
+          resourceRefId: template-form
+          type: openDrawer
+          size: large
   widgetDataTemplate:
     - forPath: icon.color
       expression: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
