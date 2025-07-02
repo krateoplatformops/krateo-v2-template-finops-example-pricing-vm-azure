@@ -166,17 +166,18 @@ EOF
 Install the resources for the frontend: 
 <details>
   <summary>Krateo <= 2.4.3</summary>
-[customform.yaml](./customform.yaml).
-```sh
-kubectl apply -f ./portal/2.4.x/customform.yaml
-```
+  [customform.yaml](./customform.yaml).
+  ```sh
+  kubectl apply -f ./portal/2.4.x/customform.yaml
+  ```
 </details>
+
 <details>
   <summary>Krateo >= 2.5.0</summary>
   [portal](./portal/)
-```sh
-kubectl apply -f ./portal/2.5.0/
-```
+  ```sh
+  kubectl apply -f ./portal/2.5.0/
+  ```
 </details>
 
 If you have Krateo 2.5.0: install the [finops-moving-window-microservice](https://github.com/krateoplatformops/finops-moving-window-microservice) with Helm:
