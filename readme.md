@@ -166,6 +166,7 @@ EOF
 Install the resources for the frontend: 
 <details>
   <summary>Krateo <= 2.4.3</summary>
+  
   [customform.yaml](./customform.yaml).
   ```sh
   kubectl apply -f ./portal/2.4.x/customform.yaml
@@ -174,6 +175,7 @@ Install the resources for the frontend:
 
 <details>
   <summary>Krateo >= 2.5.0</summary>
+
   [portal](./portal/)
   ```sh
   kubectl apply -f ./portal/2.5.0/
@@ -300,4 +302,4 @@ Now apply the [sample](/samples/exporterscrapersample.yaml) after configuring yo
 
 # Composition Creation and Krateo Namespace
 > [!NOTE] 
-> This FinOps composition example only works when Krateo is installed in `krateo-system`. If Krateo is installed in a different namespace, you **must** configure the variable [krateoNamespace](chart/values.yaml#L48) to the correct namespace when instantiating a composition. 
+> This FinOps composition example only works when Krateo is installed in `krateo-system`. If Krateo is installed in a different namespace, you **must** configure the variable `krateoNamespace`, in the `values.yaml` file `.global.krateoNamespace`, to the correct namespace when instantiating a composition. 
