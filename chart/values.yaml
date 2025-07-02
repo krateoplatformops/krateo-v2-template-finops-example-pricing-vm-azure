@@ -54,7 +54,8 @@ global:
   
 portal:
   enabled: true
-  icon: fa-hand-holding-dollar
+  overview:
+    icon: fa-hand-holding-dollar
 
 # Values for the ExporterScraperConfig, collecting data on the VM created
 metricExporter:
