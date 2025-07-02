@@ -54,23 +54,8 @@ global:
   
 portal:
   enabled: true
-  card:
-    icon: fa-hand-holding-dollar
   overview:
-    enabled: true
-    text: Example Pricing, Costs and Usage of a Virtual Machine on Azure
-  compositionstatus:
-    enabled: true
-  applicationstatus:
-    enabled: false
-  terminal:
-    enabled: false
-  events:
-    enabled: true
-  yamlviewer:
-    enabled: true
-  finops:
-    enabled: true
+    icon: fa-hand-holding-dollar
 
 # Values for the ExporterScraperConfig, collecting data on the VM created
 metricExporter:
