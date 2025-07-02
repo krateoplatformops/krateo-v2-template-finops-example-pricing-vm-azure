@@ -1,12 +1,12 @@
 # Krateo FinOps Module Pricing Example
-This repository contains a Composition Definition for Krateo that leverages the Krateo Composable FinOps components to integrate resources created through the Azure Operator and the pricing visualization flow. The composition creates a Virtual Machine on Azure through the Azure operator, visualizing it in the frontend through a card widget and custom form. The widget shows the pricing information retrieved through the FinOps module.
+This repository contains a Composition Definition for Krateo that leverages the Krateo Composable FinOps components to integrate resources created through the Azure Operator, the pricing visualization flow, the cost and usages collections and optimization. The composition creates a Virtual Machine on Azure through the Azure operator, visualizing it in the frontend through a card widget and custom form. The widget shows the pricing information retrieved through the FinOps module. Inside the composition page, the FinOps tab allows to see costs and usages of the virtual machine.
 
 It achieves so through the following components:
  - [finops-composition-definition-parser](https://github.com/krateoplatformops/finops-composition-definition-parser): this component parses the annotations contained in this chart, with the name `focus-resource-name`;
  - [azure-pricing-rest-dynamic-controller-plugin](https://github.com/krateoplatformops/azure-pricing-rest-dynamic-controller-plugin): plugin for the operator generator to gather data from the Azure pricing API;
  - [focus-data-presentation-azure](https://github.com/krateoplatformops/focus-data-presentation-azure): this composition definition integrates a custom resource for the generator operator that fetches data from the Azure pricing API and the custom resource for the FOCUS operator, which allows the fetched pricing information to be stored into the database.
-
-Additionally, it can be configured to utilize the new FinOps page in the composition portal basic. This page can be configured to show a breakdown of the costs of the composition and the usage metrics.
+ - [composition-portal-starter-finops](https://github.com/krateoplatformops/composition-portal-starter-finops): this frontend extension allows to show a breakdown of the costs of the composition and the usage metrics.
+ - all other components from Krateo Composable FinOps: [finops-operator-exporter](https://github.com/krateoplatformops/finops-operator-exporter), [finops-operator-scraper](https://github.com/krateoplatformops/finops-operator-scraper), [finops-operator-focus](https://github.com/krateoplatformops/finops-operator-focus) and [finops-database-handler](https://github.com/krateoplatformops/finops-database-handler)
 
 For `Krateo 2.4.3`, install the composition with version `0.1.4`. For `Krateo 2.5.0`, install the composition with version greater than `0.2.0`. Version 0.1.4 **omits** Open Policy Agent and its policies, thus removing the optimization components.
 
@@ -190,7 +190,7 @@ This section will cover how to configure the Krateo Composable FinOps to collect
 > [!NOTE]  
 > The Azure Portal UI may change over time, so some steps or visuals might differ slightly from what is described here.
 
-# Cost Metrics
+## Cost Metrics
 To start, you will need a storage account to store the FOCUS exports. If you do not already have it, you need to configure it: 
 1. go on your Azure dashboard and `Storage Accounts`, hit `Create` and select the `Blob Storage` mode. Then, follow the guided steps to complete the configuration. 
 2. go to `Access Control (IAM)`, then `Role Assignments` and add a new role assignment. Search for `Azure Blob Data Owner` and hit forward. Select the application that you use for the authentication. Finally, assign it.
@@ -269,7 +269,7 @@ It can also be customized to include additional ranges. The file already account
 ```
 
 ## Optimizations (Krateo 2.5.0)
-The optimizations rely on Open Policy Agent (OPA). The instances of this composition definition will install it automatically through the [finops-webhook-template-chart](https://github.com/krateoplatformops/finops-webhook-template-chart), which is imported as a dependency. The template checks whether the webhook already exists, if it does not then it creates it, otherwise it does nothing. If you have a custom installation of OPA that uses https, you will need to manually configure the certificates, otherwise it is done automatically.
+The optimizations rely on Open Policy Agent (OPA). The instances of this composition definition will install the hook automatically through the [finops-webhook-template-chart](https://github.com/krateoplatformops/finops-webhook-template-chart), which is imported as a dependency. The template checks whether the webhook already exists, if it does not then it creates it, otherwise it does nothing. If you have a custom installation of OPA that uses https, you will need to manually configure the certificates, otherwise, if you installed OPA through the Krateo Installer, it is done automatically.
 
 The fields:
 ```yaml
@@ -278,7 +278,7 @@ policyAdditionalValues:
     name: finops-moving-window-microservice-endpoint
     namespace: azure-pricing-system
 ```
-are used by the [finops-moving-window-policy](https://github.com/krateoplatformops/finops-moving-window-policy) in OPA and point to the endpoint of the [finops-moving-window-optimization-microservice](https://github.com/krateoplatformops/finops-moving-window-microservice). The policy parses all the data from the cluster and serves the complete request to the microservice, which then queries the [finops-database-handler](https://github.com/krateoplatformops/finops-database-handler) for the timeseries data and provides the optimization to the policy. The policy mutates the composition through the [finops-webhook-template](https://github.com/krateoplatformops/finops-webhook-template) to add the optimization to the field `spec.optimization`, which is then displayed in the frontend.
+are used by the [finops-moving-window-policy](https://github.com/krateoplatformops/finops-moving-window-policy) in OPA and point to the endpoint of the [finops-moving-window-optimization-microservice](https://github.com/krateoplatformops/finops-moving-window-microservice). The policy parses all the data from the cluster (e.g., secrets) and serves the complete request to the microservice, which then queries the [finops-database-handler](https://github.com/krateoplatformops/finops-database-handler) for the timeseries data to calculate the optimization. Finally, it returns the optimization to the policy. The policy mutates the composition through the [finops-webhook-template](https://github.com/krateoplatformops/finops-webhook-template) to add the optimization to the field `spec.optimization`, which is then displayed in the frontend.
 
 The policy is triggered by a `CronJob` running periodically (every day by default) that labels the Composition resource with a label `optimization` that has as the value the timestamp with the last optimization request.
 
