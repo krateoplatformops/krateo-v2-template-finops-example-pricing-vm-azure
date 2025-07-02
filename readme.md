@@ -166,8 +166,8 @@ EOF
 Install the resources for the frontend: 
 <details>
   <summary>Krateo <= 2.4.3</summary>
-  
-  [customform.yaml](./customform.yaml).
+
+  Yaml files in [customform.yaml](portal/2.4.x/customform.yaml):
   ```sh
   kubectl apply -f ./portal/2.4.x/customform.yaml
   ```
@@ -176,7 +176,7 @@ Install the resources for the frontend:
 <details>
   <summary>Krateo >= 2.5.0</summary>
 
-  [portal](./portal/)
+  Yaml files in [portal](portal/2.5.0/):
   ```sh
   kubectl apply -f ./portal/2.5.0/
   ```
